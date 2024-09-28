@@ -63,30 +63,47 @@ static void line_error()
 }
 
 // Print an error and exit
-static void error(const char *typ, const char *msg, int cod)
+static void error(const char *typ, const char *msg, bool line, int cod)
 {
-    printf("\x1b[31m%s:\x1b[0m %s\n", typ, msg);
+    if (line)
+    {
+        line_error();
+    }
+    printf("\x1b[31m%s:\x1b[0m %s", typ, msg);
+    if (line)
+    {
+        printf(" (%s:%d:%d)", Name, Line, Column);
+    }
+    printf("\n");
     exit(cod);
 }
 
 // Print an error message and exit
 void fatal(const char *msg, int cod)
 {
-    error("Error", msg, cod);
+    error("Error", msg, false, cod);
 }
 
 // Print a syntax error message and exit
 void syntax_error(const char *msg)
 {
-    line_error();
-    error("Syntax Error", msg, EX_DATAERR);
+    error("Syntax Error", msg, true, EX_DATAERR);
 }
 
 // Print an error message for an unrecognized character and exit
 void unrecognized_char_error(char chr)
 {
-    char buff[MAX_LEN];
+    char buff[128];
 
     sprintf(buff, "unrecognized character '%c'", chr);
+    syntax_error(buff);
+}
+
+// Print a match error message and exit
+void match_error(const char *exptd, const char *fnd)
+{
+    char buff[128];
+
+    sprintf(buff, "expected %s, but found '%s'", exptd, fnd);
     syntax_error(buff);
 }

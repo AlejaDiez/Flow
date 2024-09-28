@@ -37,11 +37,9 @@ void init()
 // Compiler
 void execute()
 {
-    while (Token.type != T_EOF)
-    {
-        printf("Token: %s\n", TOKEN_STR[Token.type]);
-        scan();
-    }
+    AST *expr;
+
+    expr = expression();
 }
 
 // Clean up the compiler

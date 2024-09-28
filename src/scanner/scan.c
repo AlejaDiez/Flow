@@ -148,3 +148,19 @@ void scan()
         unrecognized_char_error(c);
     }
 }
+
+// Match the expected token, and scan the next token
+VALUE match(TOKEN_TYPE typ)
+{
+    char buff[24];
+    VALUE val;
+
+    val = Token.value;
+    if (typ != Token.type)
+    {
+        sprintf(buff, "'%s'", TOKEN_STR[typ]);
+        match_error(buff, TOKEN_STR[Token.type]);
+    }
+    scan();
+    return val;
+}

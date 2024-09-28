@@ -94,12 +94,13 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Implement AST definition and creation functions.
+Implement parser to parse basic operators and integers literals.
 
--   Add new `tree.c` file to the creation of the AST.
+-   Add new `expr.c` file to parse basic arithmetic math expressions.
 -   Update the `defs.h` file to include the AST node definitions and the AST node type enumeration.
--   Update the `decl.h` file to include the AST node creation functions.
--   Update the `err.c` file.
+-   Update the `decl.h` file to include the expression function and match token function declarations.
+-   Update the `scan.c` file to include the match token function implementation.
+-   Update the `err.c` file to include the error handling for mismatched tokens.
 
 ## Contribution
 
