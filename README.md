@@ -94,9 +94,9 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Input file reading implementation.
+Implement token definition and value union.
 
--   Updated the `main.c` file to read the input file and check the file extension.
+-   Update the `defs.h` file to implement token definitions and a value union.
 
 ## Contribution
 
