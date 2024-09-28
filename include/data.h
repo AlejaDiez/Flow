@@ -6,3 +6,6 @@
 #ifndef extern_
 #define extern_ extern
 #endif
+
+extern_ FILE *Input; // Input file
+extern_ char *Name;  // Name of the input file

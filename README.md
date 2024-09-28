@@ -94,9 +94,9 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Add error handling function.
+Input file reading implementation.
 
--   Create a new file `err.c` to handle errors.
+-   Updated the `main.c` file to read the input file and check the file extension.
 
 ## Contribution
 

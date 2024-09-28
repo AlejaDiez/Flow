@@ -23,6 +23,17 @@
 
 int main(int argc, char *argv[])
 {
+    char *ext;
+
+    if (argc < 2) 
+        fatal("no input files", EX_USAGE);
+    Input = fopen(argv[1], "r");
+    if (Input == NULL)
+        fatal("cannot open input file", EX_NOINPUT);
+    Name = strdup(argv[1]);
+    ext = strrchr(Name, '.');
+    if (ext == NULL || strcmp(ext, ".flow") != 0)
+        fatal("input file must have a '.flow' extension", EX_USAGE);
     printf("Flow Compiler v%s\n", VERSION);
     return 0;
 }
