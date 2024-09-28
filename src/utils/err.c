@@ -72,7 +72,7 @@ static void error(const char *typ, const char *msg, int cod)
 // Print an error message and exit
 void fatal(const char *msg, int cod)
 {
-    error("Fatal Error", msg, cod);
+    error("Error", msg, cod);
 }
 
 // Print a syntax error message and exit

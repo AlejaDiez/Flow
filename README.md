@@ -94,12 +94,12 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Implement scanner to scan basic operators and integers literals.
+Implement AST definition and creation functions.
 
--   Add new `scan.c` file to implement the scanner.
--   Update the `data.h` file to include Putback, Line, Column, Length, and Token to store the scanner state.
--   Update the `err.c`file to handle scanner errors.
--   Update the `main.c` file to include the scanner variable initialization and the scanner loop.
+-   Add new `tree.c` file to the creation of the AST.
+-   Update the `defs.h` file to include the AST node definitions and the AST node type enumeration.
+-   Update the `decl.h` file to include the AST node creation functions.
+-   Update the `err.c` file.
 
 ## Contribution
 

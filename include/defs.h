@@ -51,3 +51,24 @@ typedef struct TOKEN
     TOKEN_TYPE type;
     VALUE value;
 } TOKEN;
+
+// Abstract Syntax Tree
+typedef enum AST_TYPE
+{
+    // Literals and Identifiers
+    A_INTLIT,
+    // Arithmetic Operators
+    A_ADD,
+    A_SUB,
+    A_MUL,
+    A_DIV,
+    A_MOD
+} AST_TYPE;
+
+typedef struct AST
+{
+    AST_TYPE type;
+    struct AST *left;
+    struct AST *right;
+    VALUE value;
+} AST;
