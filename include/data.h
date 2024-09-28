@@ -7,8 +7,9 @@
 #define extern_ extern
 #endif
 
-extern_ FILE *Input; // Input file
-extern_ char *Name;  // Name of the input file
+extern_ char *Name;   // Name of the input file
+extern_ FILE *Input;  // Input file
+extern_ FILE *Output; // Output file
 
 extern_ int Putback; // Character that was put back
 extern_ int Line;    // Current line number

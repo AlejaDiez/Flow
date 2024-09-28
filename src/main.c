@@ -45,25 +45,36 @@ void execute()
 // Clean up the compiler
 void end()
 {
-    fclose(Input);
     free(Name);
+    fclose(Input);
+    fclose(Output);
 }
 
 // Main entry point
 int main(int argc, char *argv[])
 {
-    char *ext;
+    char *name, *ext;
 
     // Check if we have an input file
     if (argc < 2)
         fatal("no input files", EX_USAGE);
-    Input = fopen(argv[1], "r");
+    // Input file
+    Name = strdup(argv[1]);
+    Input = fopen(Name, "r");
     if (Input == NULL)
         fatal("cannot open input file", EX_NOINPUT);
-    Name = strdup(argv[1]);
     ext = strrchr(Name, '.');
     if (ext == NULL || strcmp(ext, ".flow") != 0)
         fatal("input file must have a '.flow' extension", EX_USAGE);
+    // Output file
+    name = (char *)malloc((strlen(Name) - 2) * sizeof(char));
+    strncpy(name, Name, ext - Name);
+    name[ext - Name] = '\0';
+    strcat(name, ".s");
+    Output = fopen(name, "w");
+    if (Output == NULL)
+        fatal("unable to create output file", EX_OSERR);
+    free(name);
     // Compile the input file
     init();
     execute();
