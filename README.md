@@ -94,9 +94,12 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Implement token definition and value union.
+Implement scanner to scan basic operators and integers literals.
 
--   Update the `defs.h` file to implement token definitions and a value union.
+-   Add new `scan.c` file to implement the scanner.
+-   Update the `data.h` file to include Putback, Line, Column, Length, and Token to store the scanner state.
+-   Update the `err.c`file to handle scanner errors.
+-   Update the `main.c` file to include the scanner variable initialization and the scanner loop.
 
 ## Contribution
 

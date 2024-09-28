@@ -6,9 +6,13 @@
 #include <stdio.h>
 #include <sysexits.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
-#define VERSION "0.0.0-dev"
+#define MAX_LEN 256
+#define NO_VALUE \
+    (VALUE) { .pointer = NULL }
 
 // Values
 typedef union VALUE

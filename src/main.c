@@ -21,11 +21,43 @@
 #undef extern_
 #include "decl.h"
 
+#define VERSION "0.0.0-dev"
+
+// Initialize compiler
+void init()
+{
+    Putback = 0;
+    Line = 1;
+    Column = 1;
+    Length = 0;
+    // Scan the first token
+    scan();
+}
+
+// Compiler
+void execute()
+{
+    while (Token.type != T_EOF)
+    {
+        printf("Token: %s\n", TOKEN_STR[Token.type]);
+        scan();
+    }
+}
+
+// Clean up the compiler
+void end()
+{
+    fclose(Input);
+    free(Name);
+}
+
+// Main entry point
 int main(int argc, char *argv[])
 {
     char *ext;
 
-    if (argc < 2) 
+    // Check if we have an input file
+    if (argc < 2)
         fatal("no input files", EX_USAGE);
     Input = fopen(argv[1], "r");
     if (Input == NULL)
@@ -34,6 +66,9 @@ int main(int argc, char *argv[])
     ext = strrchr(Name, '.');
     if (ext == NULL || strcmp(ext, ".flow") != 0)
         fatal("input file must have a '.flow' extension", EX_USAGE);
-    printf("Flow Compiler v%s\n", VERSION);
+    // Compile the input file
+    init();
+    execute();
+    end();
     return 0;
 }
