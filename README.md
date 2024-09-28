@@ -94,7 +94,9 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Add initial project files and structure.
+Add error handling function.
+
+-   Create a new file `err.c` to handle errors.
 
 ## Contribution
 
