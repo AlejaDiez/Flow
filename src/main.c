@@ -37,10 +37,10 @@ void init()
 // Compiler
 void execute()
 {
-    AST *expr;
+    AST *seq;
 
-    expr = expression();
-    gen_code(expr);
+    seq = sequence();
+    gen_code(seq);
 }
 
 // Clean up the compiler

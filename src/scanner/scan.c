@@ -99,6 +99,53 @@ static int scan_int(int c)
     return val;
 }
 
+// Scan an identifier
+static char *scan_ident(int c)
+{
+    char *buff, *str;
+    int i;
+
+    buff = (char *)malloc(MAX_LEN * sizeof(char));
+    // Check if we ran out of memory
+    if (buff == NULL)
+        fatal("out of memory", EX_SOFTWARE);
+    i = 0;
+    // Scan until we hit a character that isn't a letter, digit or underscore
+    while (isalpha(c) || isdigit(c) || c == '_')
+    {
+        if (i < MAX_LEN - 1)
+        {
+            buff[i++] = c;
+        }
+        c = next();
+    }
+    // Put back the character that stopped the loop
+    putback(c);
+    // Check if the identifier is too long
+    if (i == MAX_LEN - 1)
+        syntax_error("identifier too long");
+    buff[i] = '\0';
+    // Copy the buffer into a new string
+    str = strdup(buff);
+    // Clean up the buffer
+    free(buff);
+    return str;
+}
+
+// Check if the identifier is a keyword and return the keyword token
+static int keyword(const char *str)
+{
+    switch (*str)
+    {
+    case 'p':
+        if (!strcmp(str, "print"))
+            return T_PRINT;
+        break;
+    }
+    syntax_error("unknown keyword");
+    return -1; // TODO: return a T_IDENT token
+}
+
 // Scan the next token from the input, and put it in the Token structure
 void scan()
 {
@@ -136,12 +183,38 @@ void scan()
         Token.type = T_PERCENT;
         Token.value = NO_VALUE;
         break;
+    case ';':
+        Token.type = T_SEMICOLON;
+        Token.value = NO_VALUE;
+        break;
+    case '(':
+        Token.type = T_LPAREN;
+        Token.value = NO_VALUE;
+        break;
+    case ')':
+        Token.type = T_RPAREN;
+        Token.value = NO_VALUE;
+        break;
     default:
         // If it's a digit, scan the integer literal
         if (isdigit(c))
         {
+            int num = scan_int(c);
+
             Token.type = T_INTLIT;
-            Token.value.integer = scan_int(c);
+            Token.value.integer = num;
+            break;
+        }
+        // If it's a letter or underscore, scan the identifier
+        if (isalpha(c) || c == '_')
+        {
+            char *str;
+            int type;
+
+            str = scan_ident(c);
+            type = keyword(str);
+            Token.type = type;
+            Token.value = NO_VALUE;
             break;
         }
         // Otherwise, it's an error

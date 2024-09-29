@@ -12,6 +12,9 @@ static int op_prec(TOKEN_TYPE typ)
 {
     switch (typ)
     {
+    case T_LPAREN:
+    case T_RPAREN:
+        return 3;
     case T_STAR:
     case T_SLASH:
     case T_PERCENT:
@@ -49,7 +52,7 @@ static AST_TYPE op_to_ast(TOKEN_TYPE typ)
 // Check if the current token is the end of an expression
 static bool end_of_expr(TOKEN_TYPE typ)
 {
-    return typ == T_EOF;
+    return typ == T_RPAREN || typ == T_SEMICOLON || typ == T_EOF;
 }
 
 // Parse a primary expression
@@ -63,6 +66,12 @@ static AST *primary()
     case T_INTLIT:
         n = make_AST_leaf(A_INTLIT, Token.value);
         scan();
+        break;
+    case T_LPAREN:
+        match(T_LPAREN);
+        n = expression();
+        match(T_RPAREN);
+        n = make_AST_unary(A_PAREN, n, NO_VALUE);
         break;
     default:
         match_error("math expression", TOKEN_STR[Token.type]);

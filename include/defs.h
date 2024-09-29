@@ -33,7 +33,14 @@ typedef enum TOKEN_TYPE
     T_SLASH,
     T_PERCENT,
     // Literals and Identifiers
-    T_INTLIT
+    T_INTLIT,
+    // Keywords
+    T_PRINT,
+    // Punctuation
+    T_SEMICOLON,
+    // Gruping
+    T_LPAREN,
+    T_RPAREN
 } TOKEN_TYPE;
 
 static const char *const TOKEN_STR[] = {
@@ -45,7 +52,14 @@ static const char *const TOKEN_STR[] = {
     "/",
     "%",
     // Literals and Identifiers
-    "integer"};
+    "integer",
+    // Keywords
+    "print",
+    // Punctuation
+    ";",
+    // Gruping
+    "(",
+    ")"};
 
 typedef struct TOKEN
 {
@@ -63,7 +77,12 @@ typedef enum AST_TYPE
     A_SUB,
     A_MUL,
     A_DIV,
-    A_MOD
+    A_MOD,
+    // Statements
+    A_PRINT,
+    // Grouping
+    A_SEQ,
+    A_PAREN
 } AST_TYPE;
 
 typedef struct AST

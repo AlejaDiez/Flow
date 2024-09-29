@@ -99,6 +99,15 @@ void unrecognized_char_error(char chr)
     syntax_error(buff);
 }
 
+// Print an error message for an unrecognized token and exit
+void unrecognized_token_error()
+{
+    char buff[128];
+
+    sprintf(buff, "unexpected token '%s'", TOKEN_STR[Token.type]);
+    syntax_error(buff);
+}
+
 // Print a match error message and exit
 void match_error(const char *exptd, const char *fnd)
 {

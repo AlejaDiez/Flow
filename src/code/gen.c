@@ -25,6 +25,12 @@ static int gen_alloc_reg()
     return x86_64_alloc_reg();
 }
 
+// Load standard librearies functions
+static void gen_load_lib()
+{
+    x86_64_load_lib();
+}
+
 // Generate the assembly code for a function prologue
 static void gen_function_prologue(const char *str)
 {
@@ -73,8 +79,14 @@ static int gen_mod(int reg_1, int reg_2)
     return x86_64_mod(reg_1, reg_2);
 }
 
+// Generate the assembly code for a print statement
+static void gen_print(int reg)
+{
+    x86_64_print(reg);
+}
+
 // Generate the assembly code for an abstract syntax tree and return the register number
-static int gen_AST(AST *n)
+static int gen_ast(AST *n)
 {
     // Register numbers
     int lft_reg, rgt_reg;
@@ -88,6 +100,17 @@ static int gen_AST(AST *n)
     // Handle special cases
     switch (n->type)
     {
+    case A_SEQ:
+        gen_ast(n->left);
+        gen_free_regs();
+        gen_ast(n->right);
+        gen_free_regs();
+        // Clean up the AST nodes
+        free(n->left);
+        n->left = NULL;
+        free(n->right);
+        n->right = NULL;
+        return NO_REG;
     default:
         break;
     }
@@ -95,7 +118,7 @@ static int gen_AST(AST *n)
     // Generate the left AST node
     if (n->left)
     {
-        lft_reg = gen_AST(n->left);
+        lft_reg = gen_ast(n->left);
         // Clean up the left register
         free(n->left);
         n->left = NULL;
@@ -103,7 +126,7 @@ static int gen_AST(AST *n)
     // Generate the right AST node
     if (n->right)
     {
-        rgt_reg = gen_AST(n->right);
+        rgt_reg = gen_ast(n->right);
         // Clean up the right register
         free(n->right);
         n->right = NULL;
@@ -124,6 +147,11 @@ static int gen_AST(AST *n)
         return gen_div(lft_reg, rgt_reg);
     case A_MOD:
         return gen_mod(lft_reg, rgt_reg);
+    case A_PRINT:
+        gen_print(lft_reg);
+        return NO_REG;
+    case A_PAREN:
+        return lft_reg;
     default:
         compile_error("unknown AST node type");
     }
@@ -136,8 +164,9 @@ int gen_code(AST *n)
     int reg;
 
     gen_free_regs();
+    gen_load_lib();
     gen_function_prologue("main");
-    reg = gen_AST(n);
+    reg = gen_ast(n);
     gen_function_epilogue();
     free(n);
     return reg;

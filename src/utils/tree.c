@@ -33,7 +33,7 @@ AST *make_AST_binary(AST_TYPE typ, AST *lft, AST *rgt, VALUE val)
 // Make a new AST unary node
 AST *make_AST_unary(AST_TYPE typ, AST *chld, VALUE val)
 {
-    return make_AST_node(typ, NULL, chld, val);
+    return make_AST_node(typ, chld, NULL, val);
 }
 
 // Make a new AST leaf node

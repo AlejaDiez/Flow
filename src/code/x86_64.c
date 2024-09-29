@@ -46,30 +46,44 @@ int x86_64_alloc_reg()
     return -1;
 }
 
+// Load standard librearies functions
+void x86_64_load_lib()
+{
+    // Print function
+    fprintf(
+        Output,
+        "\t.section __TEXT, __text\n"
+        ".LC0:\n"
+        "\t.string\t\"%%d\\n\"\n"
+        "_print:\n"
+        "\tpushq\t%%rbp\n"
+        "\tmovq\t%%rsp, %%rbp\n"
+        "\tsubq\t$16, %%rsp\n"
+        "\tmovl\t%%edi, -4(%%rbp)\n"
+        "\tmovl\t-4(%%rbp), %%eax\n"
+        "\tmovl\t%%eax, %%esi\n"
+        "\tleaq	.LC0(%%rip), %%rdi\n"
+        "\tmovl	$0, %%eax\n"
+        "\tcall	_printf\n"
+        "\tnop\n"
+        "\tleave\n"
+        "\tret\n"
+        "\n");
+}
+
 // Generate the assembly code for a function prologue
 void x86_64_function_prologue(const char *str)
 {
-    if (strcmp(str, "main") == 0)
-    {
-        fprintf(
-            Output,
-            "\t.section __TEXT, __text\n"
-            "\t.globl _main\n"
-            "_main:\n"
-            "\tpushq\t%%rbp\n"
-            "\tmovq\t%%rsp, %%rbp\n");
-    }
-    else
-    {
-        fprintf(
-            Output,
-            "\t.section __TEXT, __text\n"
-            "\t.globl __%s\n"
-            "__%s:\n"
-            "\tpushq\t%%rbp\n"
-            "\tmovq\t%%rsp, %%rbp\n",
-            str, str);
-    }
+    const char *prefix = strcmp(str, "main") == 0 ? "_" : "__";
+
+    fprintf(
+        Output,
+        "\t.section __TEXT, __text\n"
+        "\t.globl %s%s\n"
+        "%s%s:\n"
+        "\tpushq\t%%rbp\n"
+        "\tmovq\t%%rsp, %%rbp\n",
+        prefix, str, prefix, str);
 }
 
 // Generate the assembly code for a function epilogue
@@ -142,4 +156,15 @@ int x86_64_mod(int reg_1, int reg_2)
         regs[reg_1], regs[reg_2], regs[reg_1]);
     x86_64_free_reg(reg_2);
     return reg_1;
+}
+
+// Generate the assembly code for a print statement
+void x86_64_print(int reg)
+{
+    fprintf(
+        Output,
+        "\tmovq\t%s, %%rdi\n"
+        "\tcall\t_print\n",
+        regs[reg]);
+    x86_64_free_reg(reg);
 }
