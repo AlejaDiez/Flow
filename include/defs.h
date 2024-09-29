@@ -13,6 +13,7 @@
 #define MAX_LEN 256
 #define NO_VALUE \
     (VALUE) { .pointer = NULL }
+#define NO_REG -1
 
 // Values
 typedef union VALUE

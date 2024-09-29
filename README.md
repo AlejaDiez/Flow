@@ -94,10 +94,14 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Output file writting implementation.
+Implement code generation for x86_64 cpu.
 
--   Update `data.h` file to include the Output file
--   Update `main.c` file to include the Output file implementation
+-   Add `x86_64.c` file to include the x86_64 assembly code generation
+-   Add `gen.c` file to include the generic assembly code generation
+-   Update `decl.h` file to include the gen and x86_64 functions
+-   Update `defs.h` file to include the NO_REG definition
+-   Update `err.c` file to include compiler errors
+-   Update `main.c` file to include the code generation
 
 ## Contribution
 

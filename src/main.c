@@ -40,6 +40,7 @@ void execute()
     AST *expr;
 
     expr = expression();
+    gen_code(expr);
 }
 
 // Clean up the compiler

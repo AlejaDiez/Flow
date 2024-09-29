@@ -107,3 +107,9 @@ void match_error(const char *exptd, const char *fnd)
     sprintf(buff, "expected %s, but found '%s'", exptd, fnd);
     syntax_error(buff);
 }
+
+// Print a compiler error message and exit
+void compile_error(const char *msg)
+{
+    error("Compile Error", msg, false, EX_SOFTWARE);
+}
