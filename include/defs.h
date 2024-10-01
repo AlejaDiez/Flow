@@ -86,6 +86,7 @@ typedef enum AST_TYPE
 {
     // Literals and Identifiers
     A_INTLIT,
+    A_IDENT,
     // Arithmetic Operators
     A_ADD,
     A_SUB,
@@ -93,6 +94,7 @@ typedef enum AST_TYPE
     A_DIV,
     A_MOD,
     // Statements
+    A_ASSIGN,
     A_PRINT,
     // Grouping
     A_SEQ,

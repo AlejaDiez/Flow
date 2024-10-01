@@ -245,6 +245,22 @@ void scan()
     }
 }
 
+// Match the expected token, and scan the next token
+VALUE match(TOKEN_TYPE typ)
+{
+    char buff[24];
+    VALUE val;
+
+    val = Token.value;
+    if (typ != Token.type)
+    {
+        sprintf(buff, "'%s'", TOKEN_STR[typ]);
+        match_error(buff, TOKEN_STR[Token.type]);
+    }
+    scan();
+    return val;
+}
+
 // Look ahead in the input to see the next tokens without consuming them
 TOKEN look_ahead()
 {
@@ -278,20 +294,4 @@ TOKEN look_ahead()
     Token = state.token;
     // Return the token
     return tok;
-}
-
-// Match the expected token, and scan the next token
-VALUE match(TOKEN_TYPE typ)
-{
-    char buff[24];
-    VALUE val;
-
-    val = Token.value;
-    if (typ != Token.type)
-    {
-        sprintf(buff, "'%s'", TOKEN_STR[typ]);
-        match_error(buff, TOKEN_STR[Token.type]);
-    }
-    scan();
-    return val;
 }

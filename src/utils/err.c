@@ -117,6 +117,15 @@ void match_error(const char *exptd, const char *fnd)
     syntax_error(buff);
 }
 
+// Print an undeclared variable error message and exit
+void undeclared_variable_error(const char *ident)
+{
+    char buff[128];
+
+    snprintf(buff, sizeof(buff), "undeclared variable '%s'", ident);
+    syntax_error(buff);
+}
+
 // Print a compiler error message and exit
 void compile_error(const char *msg)
 {

@@ -4,6 +4,7 @@
  ********************************************************************************/
 
 // code/gen.c
+void gen_global(const char *str);
 int gen_code(AST *n);
 
 // code/x86_64.c
@@ -13,6 +14,9 @@ int x86_64_alloc_reg();
 void x86_64_load_lib();
 void x86_64_function_prologue(const char *str);
 void x86_64_function_epilogue();
+void x86_64_global(const char *str);
+int x86_64_store_global(int reg, const char *str);
+int x86_64_load_global(const char *str);
 int x86_64_load_int(int val);
 int x86_64_add(int reg_1, int reg_2);
 int x86_64_sub(int reg_1, int reg_2);
@@ -20,6 +24,9 @@ int x86_64_mul(int reg_1, int reg_2);
 int x86_64_div(int reg_1, int reg_2);
 int x86_64_mod(int reg_1, int reg_2);
 void x86_64_print(int reg);
+
+// parser/decl.c
+void var_declaration();
 
 // parser/expr.c
 AST *expression();
@@ -30,8 +37,8 @@ AST *sequence();
 
 // scanner/scan.c
 void scan();
-TOKEN look_ahead();
 VALUE match(TOKEN_TYPE typ);
+TOKEN look_ahead();
 
 // utils/err.c
 void fatal(const char *msg, int cod);
@@ -39,10 +46,10 @@ void syntax_error(const char *msg);
 void unrecognized_char_error(char chr);
 void unrecognized_token_error();
 void match_error(const char *exptd, const char *fnd);
+void undeclared_variable_error(const char *ident);
 void compile_error(const char *msg);
 
 // utils/sym.c
-static int new_glob();
 int find_glob(const char *str);
 int add_glob(const char *str);
 

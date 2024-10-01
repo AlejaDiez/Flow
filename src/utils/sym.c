@@ -14,7 +14,7 @@ static int new_glob()
 
     i = Globals++;
     if (i >= MAX_SYM)
-        error("too many global symbols", EX_SOFTWARE);
+        fatal("too many global symbols", EX_SOFTWARE);
     return i;
 }
 

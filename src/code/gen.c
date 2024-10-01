@@ -43,6 +43,24 @@ static void gen_function_epilogue()
     x86_64_function_epilogue();
 }
 
+// Generate the assembly code for a global variable
+void gen_global(const char *str)
+{
+    x86_64_global(str);
+}
+
+// Store a register value in a global variable and return the register number
+static int gen_store_global(int reg, const char *str)
+{
+    return x86_64_store_global(reg, str);
+}
+
+// Load a global variable into a register and return the register number
+static int gen_load_global(const char *str)
+{
+    return x86_64_load_global(str);
+}
+
 // Load an integer literal value into a register and return the register number
 static int gen_load_int(int val)
 {
@@ -111,6 +129,16 @@ static int gen_ast(AST *n)
         free(n->right);
         n->right = NULL;
         return NO_REG;
+    case A_ASSIGN:
+        lft_reg = gen_ast(n->left);
+        gen_store_global(lft_reg, GlobalSymbols[n->right->value.integer].name);
+        gen_free_reg(lft_reg);
+        // Clean up the AST nodes
+        free(n->left);
+        n->left = NULL;
+        free(n->right);
+        n->right = NULL;
+        return NO_REG;
     default:
         break;
     }
@@ -137,6 +165,8 @@ static int gen_ast(AST *n)
     {
     case A_INTLIT:
         return gen_load_int(n->value.integer);
+    case A_IDENT:
+        return gen_load_global(GlobalSymbols[n->value.integer].name);
     case A_ADD:
         return gen_add(lft_reg, rgt_reg);
     case A_SUB:

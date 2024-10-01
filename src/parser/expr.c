@@ -58,6 +58,7 @@ static bool end_of_expr(TOKEN_TYPE typ)
 // Parse a primary expression
 static AST *primary()
 {
+    int id;
     AST *n = NULL;
 
     // Check the type of the token
@@ -65,6 +66,13 @@ static AST *primary()
     {
     case T_INTLIT:
         n = make_AST_leaf(A_INTLIT, Token.value);
+        scan();
+        break;
+    case T_IDENT:
+        id = find_glob(Token.value.string);
+        if (id == -1)
+            undeclared_variable_error(Token.value.string);
+        n = make_AST_leaf(A_IDENT, (VALUE){id});
         scan();
         break;
     case T_LPAREN:

@@ -52,9 +52,13 @@ void x86_64_load_lib()
     // Print function
     fprintf(
         Output,
-        "\t.section __TEXT, __text\n"
+        "\t.section __DATA, __data\n"
         ".LC0:\n"
         "\t.string\t\"%%d\\n\"\n"
+        "\n");
+    fprintf(
+        Output,
+        "\t.section __TEXT, __text\n"
         "_print:\n"
         "\tpushq\t%%rbp\n"
         "\tmovq\t%%rsp, %%rbp\n"
@@ -95,6 +99,33 @@ void x86_64_function_epilogue()
         "\tpopq\t%%rbp\n"
         "\tret\n"
         "\n");
+}
+
+// Generate the assembly code for a global variable
+void x86_64_global(const char *str)
+{
+    fprintf(
+        Output,
+        "\t.section __DATA, __bss\n"
+        "\t.comm\t%s,8,8\n"
+        "\n",
+        str);
+}
+
+// Store a register value in a global variable and return the register number
+int x86_64_store_global(int reg, const char *str)
+{
+    fprintf(Output, "\tmovq\t%s, %s(\%%rip)\n", regs[reg], str);
+    return reg;
+}
+
+// Load a global variable into a register and return the register number
+int x86_64_load_global(const char *str)
+{
+    int reg = x86_64_alloc_reg();
+
+    fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", str, regs[reg]);
+    return reg;
 }
 
 // Load an integer literal value into a register and return the register number
