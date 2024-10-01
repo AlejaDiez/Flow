@@ -30,6 +30,7 @@ AST *sequence();
 
 // scanner/scan.c
 void scan();
+TOKEN look_ahead();
 VALUE match(TOKEN_TYPE typ);
 
 // utils/err.c

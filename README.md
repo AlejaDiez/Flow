@@ -94,16 +94,10 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Scan identifiers and keywords for variables declaration and assignment.
+Refactor code to add look ahead functionality in scanner.
 
-```flow
-var x: int; # Declare a variable
-
-x = 10; # Assign a value to a variable
-```
-
--   Update `defs.h` to include new token types for identifiers and keywords.
--   Update the scanner to recognize identifiers and keywords for variable declaration and assignment.
+-   Update `decl.h` to include the new function.
+-   Update `scan.c` to include a new function `look_ahead` that reads the next token without consuming it.
 
 ## Contribution
 

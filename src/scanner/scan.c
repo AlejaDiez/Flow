@@ -245,6 +245,41 @@ void scan()
     }
 }
 
+// Look ahead in the input to see the next tokens without consuming them
+TOKEN look_ahead()
+{
+    TOKEN tok;
+    struct
+    {
+        long position;
+        int putback;
+        int line;
+        int column;
+        int length;
+        struct TOKEN token;
+    } state;
+
+    // Save the current state
+    state.position = ftell(Input);
+    state.putback = Putback;
+    state.line = Line;
+    state.column = Column;
+    state.length = Length;
+    state.token = Token;
+    // Scan the next token
+    scan();
+    tok = Token;
+    // Restore the state
+    fseek(Input, state.position, SEEK_SET);
+    Putback = state.putback;
+    Line = state.line;
+    Column = state.column;
+    Length = state.length;
+    Token = state.token;
+    // Return the token
+    return tok;
+}
+
 // Match the expected token, and scan the next token
 VALUE match(TOKEN_TYPE typ)
 {
