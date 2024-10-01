@@ -137,13 +137,20 @@ static int keyword(const char *str)
 {
     switch (*str)
     {
+    case 'i':
+        if (!strcmp(str, "int"))
+            return T_INT;
+        break;
     case 'p':
         if (!strcmp(str, "print"))
             return T_PRINT;
         break;
+    case 'v':
+        if (!strcmp(str, "var"))
+            return T_VAR;
+        break;
     }
-    syntax_error("unknown keyword");
-    return -1; // TODO: return a T_IDENT token
+    return T_IDENT;
 }
 
 // Scan the next token from the input, and put it in the Token structure
@@ -183,6 +190,14 @@ void scan()
         Token.type = T_PERCENT;
         Token.value = NO_VALUE;
         break;
+    case '=':
+        Token.type = T_ASSIGN;
+        Token.value = NO_VALUE;
+        break;
+    case ':':
+        Token.type = T_COLON;
+        Token.value = NO_VALUE;
+        break;
     case ';':
         Token.type = T_SEMICOLON;
         Token.value = NO_VALUE;
@@ -214,7 +229,15 @@ void scan()
             str = scan_ident(c);
             type = keyword(str);
             Token.type = type;
-            Token.value = NO_VALUE;
+            if (type == T_IDENT)
+            {
+                Token.value.string = str;
+            }
+            else
+            {
+                Token.value = NO_VALUE;
+                free(str);
+            }
             break;
         }
         // Otherwise, it's an error

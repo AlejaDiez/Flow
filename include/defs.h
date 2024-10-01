@@ -20,6 +20,7 @@
 typedef union VALUE
 {
     int integer;
+    char *string;
     void *pointer;
 } VALUE;
 
@@ -33,11 +34,17 @@ typedef enum TOKEN_TYPE
     T_STAR,
     T_SLASH,
     T_PERCENT,
+    T_ASSIGN,
     // Literals and Identifiers
     T_INTLIT,
+    T_IDENT,
+    // Types
+    T_INT,
     // Keywords
+    T_VAR,
     T_PRINT,
     // Punctuation
+    T_COLON,
     T_SEMICOLON,
     // Gruping
     T_LPAREN,
@@ -52,11 +59,17 @@ static const char *const TOKEN_STR[] = {
     "*",
     "/",
     "%",
+    "=",
     // Literals and Identifiers
     "integer",
+    "identifier",
+    // Types
+    "int",
     // Keywords
+    "var",
     "print",
     // Punctuation
+    ":",
     ";",
     // Gruping
     "(",

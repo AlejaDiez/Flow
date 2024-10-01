@@ -94,12 +94,16 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Refactor code to add global symbol table.
+Scan identifiers and keywords for variables declaration and assignment.
 
--   Add `sym.c` file to manage the global symbol table
--   Update `data.h` to include global symbol array
--   Update `decl.h` to include global symbol table functions
--   Update `defs.h` to include MAX_SYM constant
+```flow
+var x: int; # Declare a variable
+
+x = 10; # Assign a value to a variable
+```
+
+-   Update `defs.h` to include new token types for identifiers and keywords.
+-   Update the scanner to recognize identifiers and keywords for variable declaration and assignment.
 
 ## Contribution
 
