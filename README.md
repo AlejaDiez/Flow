@@ -94,18 +94,12 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Refactor the code to implement the print statement and the sequence of statements, also including parenthesized expressions.
+Refactor code to add global symbol table.
 
--   Add `stmt.c` to implement statements.
--   Add new tests for the print statement, sequence of statements, and parenthesized expressions.
--   Update `decl.h` to include the new statement functions and error handling.
--   Update `defs.c` to include types for new statements like print, sequence and parenthesized expressions.
--   Update `gen.c` and `x86_64.c` to include the statements code generation.
--   Update `expr.c` to include the parenthesized expressions, and stop parsing expressions with the semicolon.
--   Update `scan.c` to include the new types of tokens, also include identifier and keywords scan functions.
--   Update `err.c` to include error handling for unrecognized tokens.
--   Update `tree.c` to change the unary tree node, saving the child in left instead of right.
--   Update `main.c` to parse sequences of statements instead of a single expression.
+-   Add `sym.c` file to manage the global symbol table
+-   Update `data.h` to include global symbol array
+-   Update `decl.h` to include global symbol table functions
+-   Update `defs.h` to include MAX_SYM constant
 
 ## Contribution
 

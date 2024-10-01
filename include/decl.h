@@ -40,6 +40,11 @@ void unrecognized_token_error();
 void match_error(const char *exptd, const char *fnd);
 void compile_error(const char *msg);
 
+// utils/sym.c
+static int new_glob();
+int find_glob(const char *str);
+int add_glob(const char *str);
+
 // utils/tree.c
 AST *make_AST_node(AST_TYPE typ, AST *lft, AST *rgt, VALUE val);
 AST *make_AST_binary(AST_TYPE typ, AST *lft, AST *rgt, VALUE val);

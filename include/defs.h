@@ -11,6 +11,7 @@
 #include <ctype.h>
 
 #define MAX_LEN 256
+#define MAX_SYM 1024
 #define NO_VALUE \
     (VALUE) { .pointer = NULL }
 #define NO_REG -1
@@ -92,3 +93,9 @@ typedef struct AST
     struct AST *right;
     VALUE value;
 } AST;
+
+// Symbol
+typedef struct SYMBOL
+{
+    char *name;
+} SYMBOL;
