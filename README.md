@@ -94,11 +94,11 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Scan relational operators.
+Parse relational operations.
 
--   Add new tests for relational operators.
--   Update `defs.h` to include relational operators tokens and relational operations nodes.
--   Update `scan.c` to scan relational operators.
+-   Update `decl.h` to include functions for relational operations.
+-   Update `gen.c` and `x86_64` to generate code for relational operations.
+-   Update `expr.c` to parse relational operations.
 
 ## Contribution
 

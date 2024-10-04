@@ -23,6 +23,7 @@ int x86_64_sub(int reg_1, int reg_2);
 int x86_64_mul(int reg_1, int reg_2);
 int x86_64_div(int reg_1, int reg_2);
 int x86_64_mod(int reg_1, int reg_2);
+int x86_64_cmp(int reg_1, int reg_2, const char *cmp);
 void x86_64_print(int reg);
 
 // parser/decl.c

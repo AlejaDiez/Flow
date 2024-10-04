@@ -97,6 +97,12 @@ static int gen_mod(int reg_1, int reg_2)
     return x86_64_mod(reg_1, reg_2);
 }
 
+// Generate the assembly code for a comparison operation and return the register number
+static int gen_cmp(int reg_1, int reg_2, const char *cmp)
+{
+    return x86_64_cmp(reg_1, reg_2, cmp);
+}
+
 // Generate the assembly code for a print statement
 static void gen_print(int reg)
 {
@@ -177,6 +183,18 @@ static int gen_ast(AST *n)
         return gen_div(lft_reg, rgt_reg);
     case A_MOD:
         return gen_mod(lft_reg, rgt_reg);
+    case A_EQ:
+        return gen_cmp(lft_reg, rgt_reg, "e");
+    case A_NE:
+        return gen_cmp(lft_reg, rgt_reg, "ne");
+    case A_LT:
+        return gen_cmp(lft_reg, rgt_reg, "l");
+    case A_LE:
+        return gen_cmp(lft_reg, rgt_reg, "le");
+    case A_GT:
+        return gen_cmp(lft_reg, rgt_reg, "g");
+    case A_GE:
+        return gen_cmp(lft_reg, rgt_reg, "ge");
     case A_PRINT:
         gen_print(lft_reg);
         return NO_REG;

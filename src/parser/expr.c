@@ -14,13 +14,21 @@ static int op_prec(TOKEN_TYPE typ)
     {
     case T_LPAREN:
     case T_RPAREN:
-        return 3;
+        return 5;
     case T_STAR:
     case T_SLASH:
     case T_PERCENT:
-        return 2;
+        return 4;
     case T_PLUS:
     case T_MINUS:
+        return 3;
+    case T_LESS:
+    case T_LESS_EQUAL:
+    case T_GREATER:
+    case T_GREATER_EQUAL:
+        return 2;
+    case T_EQUAL:
+    case T_NOT_EQUAL:
         return 1;
     default:
         match_error("an operator", TOKEN_STR[typ]);
@@ -43,6 +51,18 @@ static AST_TYPE op_to_ast(TOKEN_TYPE typ)
         return A_DIV;
     case T_PERCENT:
         return A_MOD;
+    case T_EQUAL:
+        return A_EQ;
+    case T_NOT_EQUAL:
+        return A_NE;
+    case T_LESS:
+        return A_LT;
+    case T_LESS_EQUAL:
+        return A_LE;
+    case T_GREATER:
+        return A_GT;
+    case T_GREATER_EQUAL:
+        return A_GE;
     default:
         match_error("an operator", TOKEN_STR[typ]);
         return -1;

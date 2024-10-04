@@ -9,6 +9,7 @@
 
 // Register list
 static char *regs[4] = {"%r8", "%r9", "%r10", "%r11"};
+static char *bregs[4] = {"%r8b", "%r9b", "%r10b", "%r11b"};
 // Register availability
 static bool free_regs[4];
 
@@ -187,6 +188,19 @@ int x86_64_mod(int reg_1, int reg_2)
         regs[reg_1], regs[reg_2], regs[reg_1]);
     x86_64_free_reg(reg_2);
     return reg_1;
+}
+
+// Generate the assembly code for a comparison operation and return the register number
+int x86_64_cmp(int reg_1, int reg_2, const char *cmp)
+{
+    fprintf(
+        Output,
+        "\tcmpq\t%s, %s\n"
+        "\tset%s\t%s\n"
+        "\tmovzbq\t%s, %s\n",
+        regs[reg_2], regs[reg_1], cmp, bregs[reg_2], bregs[reg_2], regs[reg_2]);
+    x86_64_free_reg(reg_1);
+    return reg_2;
 }
 
 // Generate the assembly code for a print statement
