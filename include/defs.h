@@ -28,12 +28,20 @@ typedef union VALUE
 typedef enum TOKEN_TYPE
 {
     T_EOF,
-    // Operators
+    // Arithmetic Operators
     T_PLUS,
     T_MINUS,
     T_STAR,
     T_SLASH,
     T_PERCENT,
+    // Relational Operators
+    T_EQUAL,
+    T_NOT_EQUAL,
+    T_LESS,
+    T_LESS_EQUAL,
+    T_GREATER,
+    T_GREATER_EQUAL,
+    // Assignment Operators
     T_ASSIGN,
     // Literals and Identifiers
     T_INTLIT,
@@ -53,12 +61,20 @@ typedef enum TOKEN_TYPE
 
 static const char *const TOKEN_STR[] = {
     "eof",
-    // Operators
+    // Arithmetic Operators
     "+",
     "-",
     "*",
     "/",
     "%",
+    // Relational Operators
+    "==",
+    "!=",
+    "<",
+    "<=",
+    ">",
+    ">=",
+    // Assignment Operators
     "=",
     // Literals and Identifiers
     "integer",
@@ -87,14 +103,22 @@ typedef enum AST_TYPE
     // Literals and Identifiers
     A_INTLIT,
     A_IDENT,
-    // Arithmetic Operators
+    // Arithmetic Operations
     A_ADD,
     A_SUB,
     A_MUL,
     A_DIV,
     A_MOD,
-    // Statements
+    // Relational Operations
+    A_EQ,
+    A_NE,
+    A_LT,
+    A_LE,
+    A_GT,
+    A_GE,
+    // Assignment Operations
     A_ASSIGN,
+    // Statements
     A_PRINT,
     // Grouping
     A_SEQ,

@@ -191,8 +191,56 @@ void scan()
         Token.value = NO_VALUE;
         break;
     case '=':
-        Token.type = T_ASSIGN;
-        Token.value = NO_VALUE;
+        c = next();
+        if (c == '=')
+        {
+            Token.type = T_EQUAL;
+            Token.value = NO_VALUE;
+        }
+        else
+        {
+            putback(c);
+            Token.type = T_ASSIGN;
+            Token.value = NO_VALUE;
+        }
+        break;
+    case '!':
+        c = next();
+        if (c == '=')
+        {
+            Token.type = T_NOT_EQUAL;
+            Token.value = NO_VALUE;
+        }
+        else
+            unrecognized_char_error(c);
+        break;
+    case '<':
+        c = next();
+        if (c == '=')
+        {
+            Token.type = T_LESS_EQUAL;
+            Token.value = NO_VALUE;
+        }
+        else
+        {
+            putback(c);
+            Token.type = T_LESS;
+            Token.value = NO_VALUE;
+        }
+        break;
+    case '>':
+        c = next();
+        if (c == '=')
+        {
+            Token.type = T_GREATER_EQUAL;
+            Token.value = NO_VALUE;
+        }
+        else
+        {
+            putback(c);
+            Token.type = T_GREATER;
+            Token.value = NO_VALUE;
+        }
         break;
     case ':':
         Token.type = T_COLON;

@@ -94,21 +94,11 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse identifiers and keywords for variables declaration and assignment.
+Scan relational operators.
 
-```flow
-var x: int; # Declare a variable
-
-x = 10; # Assign a value to a variable
-```
-
--   Add new `decl.c` file to handle variable declarations.
--   Update `decl.h` to include new functions for parsing variable declarations.
--   Update `defs.h` to include new AST node types for variable declarations.
--   Update `gen.c` and `x86_64.c` to generate code for variable declarations.
--   Update `expr.c` to parse variable in expressions.
--   Update `stmt.c` to parse variable declarations and variable assignments.
--   Update `err.c` to handle not declared variables errors.
+-   Add new tests for relational operators.
+-   Update `defs.h` to include relational operators tokens and relational operations nodes.
+-   Update `scan.c` to scan relational operators.
 
 ## Contribution
 

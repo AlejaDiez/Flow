@@ -1,1 +1,6 @@
-print((2 + 3) * (5 - 8) / 3);
+var a: int;
+var b: int;
+
+a = 5;
+b = 12;
+print(a + b);

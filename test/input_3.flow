@@ -1,6 +1,11 @@
-var a: int;
-var b: int;
+var x: int;
 
-a = 5;
-b = 12;
-print(a + b);
+x = 7 < 9;  print(x);
+x = 7 <= 9; print(x);
+x = 7 != 9; print(x);
+x = 7 == 7; print(x);
+x = 7 >= 7; print(x);
+x = 7 <= 7; print(x);
+x = 9 > 7;  print(x);
+x = 9 >= 7; print(x);
+x = 9 != 7; print(x);
