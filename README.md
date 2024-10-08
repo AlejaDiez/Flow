@@ -94,18 +94,17 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Scan conditional if-else statements.
+Parse block statements.
 
 ```flow
-if (condition) {
-    // code block
-} else {
+{
     // code block
 }
 ```
 
--   Update the `defs.h` file to include if-else and braces tokens.
--   Update the `scan.c` file to scan new tokens.
+-   Update the `decl.h` file to include block_statement function.
+-   Update the `stmt.c` file to parse block statements.
+-   Update `input_2.flow` file to include block statements.
 
 ## Contribution
 

@@ -88,10 +88,30 @@ AST *statement()
         return NULL;
     case T_PRINT:
         return print_statement();
+    case T_LBRACE:
+        return block_statement();
     default:
         unrecognized_token_error();
     }
     return NULL;
+}
+
+// Parse a block and return an AST
+AST *block_statement()
+{
+    AST *seq = NULL, *stmt = NULL;
+
+    // Match the sintax
+    match(T_LBRACE);
+    // Parse the statements
+    while (Token.type != T_RBRACE)
+    {
+        stmt = statement();
+        seq = add_seq(seq, stmt);
+    }
+    // Match the sintax
+    match(T_RBRACE);
+    return seq;
 }
 
 // Parse multiple statements

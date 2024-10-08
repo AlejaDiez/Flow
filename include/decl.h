@@ -34,6 +34,7 @@ AST *expression();
 
 // parser/stmt.c
 AST *statement();
+AST *block_statement();
 AST *sequence();
 
 // scanner/scan.c
