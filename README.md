@@ -94,11 +94,18 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse relational operations.
+Scan conditional if-else statements.
 
--   Update `decl.h` to include functions for relational operations.
--   Update `gen.c` and `x86_64` to generate code for relational operations.
--   Update `expr.c` to parse relational operations.
+```flow
+if (condition) {
+    // code block
+} else {
+    // code block
+}
+```
+
+-   Update the `defs.h` file to include if-else and braces tokens.
+-   Update the `scan.c` file to scan new tokens.
 
 ## Contribution
 

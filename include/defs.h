@@ -50,13 +50,17 @@ typedef enum TOKEN_TYPE
     T_INT,
     // Keywords
     T_VAR,
+    T_IF,
+    T_ELSE,
     T_PRINT,
     // Punctuation
     T_COLON,
     T_SEMICOLON,
     // Gruping
     T_LPAREN,
-    T_RPAREN
+    T_RPAREN,
+    T_LBRACE,
+    T_RBRACE
 } TOKEN_TYPE;
 
 static const char *const TOKEN_STR[] = {
@@ -83,13 +87,17 @@ static const char *const TOKEN_STR[] = {
     "int",
     // Keywords
     "var",
+    "if",
+    "else",
     "print",
     // Punctuation
     ":",
     ";",
     // Gruping
     "(",
-    ")"};
+    ")",
+    "{",
+    "}"};
 
 typedef struct TOKEN
 {

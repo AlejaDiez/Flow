@@ -137,7 +137,13 @@ static int keyword(const char *str)
 {
     switch (*str)
     {
+    case 'e':
+        if (!strcmp(str, "else"))
+            return T_ELSE;
+        break;
     case 'i':
+        if (!strcmp(str, "if"))
+            return T_IF;
         if (!strcmp(str, "int"))
             return T_INT;
         break;
@@ -256,6 +262,14 @@ void scan()
         break;
     case ')':
         Token.type = T_RPAREN;
+        Token.value = NO_VALUE;
+        break;
+    case '{':
+        Token.type = T_LBRACE;
+        Token.value = NO_VALUE;
+        break;
+    case '}':
+        Token.type = T_RBRACE;
         Token.value = NO_VALUE;
         break;
     default:
