@@ -15,6 +15,7 @@
 #define NO_VALUE \
     (VALUE) { .pointer = NULL }
 #define NO_REG -1
+#define NO_LABEL -1
 
 // Values
 typedef union VALUE
@@ -127,6 +128,7 @@ typedef enum AST_TYPE
     // Assignment Operations
     A_ASSIGN,
     // Statements
+    A_IFELSE,
     A_PRINT,
     // Grouping
     A_SEQ,

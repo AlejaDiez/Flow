@@ -7,6 +7,14 @@
 #include "data.h"
 #include "decl.h"
 
+// Generate a label
+static int label()
+{
+    static int lbl = 0;
+
+    return ++lbl;
+}
+
 // Free all registers
 static void gen_free_regs()
 {
@@ -41,6 +49,18 @@ static void gen_function_prologue(const char *str)
 static void gen_function_epilogue()
 {
     x86_64_function_epilogue();
+}
+
+// Generate a label
+static void gen_label(int lbl)
+{
+    x86_64_label(lbl);
+}
+
+// Generate a jump to a label
+static void gen_jump(int lbl)
+{
+    x86_64_jump(lbl);
 }
 
 // Generate the assembly code for a global variable
@@ -103,6 +123,12 @@ static int gen_cmp(int reg_1, int reg_2, const char *cmp)
     return x86_64_cmp(reg_1, reg_2, cmp);
 }
 
+// Generate the assembly code for a comparison and jump operation and return the register number
+static int gen_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl)
+{
+    return x86_64_cmp_jump(reg_1, reg_2, jmp, lbl);
+}
+
 // Generate the assembly code for a print statement
 static void gen_print(int reg)
 {
@@ -110,7 +136,7 @@ static void gen_print(int reg)
 }
 
 // Generate the assembly code for an abstract syntax tree and return the register number
-static int gen_ast(AST *n)
+static int gen_ast(AST *n, AST *prt, int lbl)
 {
     // Register numbers
     int lft_reg, rgt_reg;
@@ -125,9 +151,9 @@ static int gen_ast(AST *n)
     switch (n->type)
     {
     case A_SEQ:
-        gen_ast(n->left);
+        gen_ast(n->left, n, NO_LABEL);
         gen_free_regs();
-        gen_ast(n->right);
+        gen_ast(n->right, n, NO_LABEL);
         gen_free_regs();
         // Clean up the AST nodes
         free(n->left);
@@ -136,12 +162,48 @@ static int gen_ast(AST *n)
         n->right = NULL;
         return NO_REG;
     case A_ASSIGN:
-        lft_reg = gen_ast(n->left);
+        lft_reg = gen_ast(n->left, n, NO_LABEL);
         gen_store_global(lft_reg, GlobalSymbols[n->right->value.integer].name);
         gen_free_reg(lft_reg);
         // Clean up the AST nodes
         free(n->left);
         n->left = NULL;
+        free(n->right);
+        n->right = NULL;
+        return NO_REG;
+    case A_IFELSE:
+        // Generate false label (if there is no else clause, this is the end label)
+        lft_reg = label();
+        if (n->right)
+        {
+            rgt_reg = label(); // Generate the end label
+        }
+        // Generate the left AST node (condition)
+        gen_ast(n->left, n, lft_reg);
+        gen_free_regs();
+        // Generate the mid AST node (true clause)
+        gen_ast(n->middle, n, NO_LABEL);
+        gen_free_regs();
+        // Generate the end label jump if there is an else clause
+        if (n->right)
+        {
+            gen_jump(rgt_reg);
+        }
+        // Generate the false label
+        gen_label(lft_reg);
+        // Generate the right AST node (false clause) if there is an else clause
+        if (n->right)
+        {
+            gen_ast(n->right, n, NO_LABEL);
+            gen_free_regs();
+            // Generate the end label
+            gen_label(rgt_reg);
+        }
+        // Clean up the AST nodes
+        free(n->left);
+        n->left = NULL;
+        free(n->middle);
+        n->middle = NULL;
         free(n->right);
         n->right = NULL;
         return NO_REG;
@@ -152,7 +214,7 @@ static int gen_ast(AST *n)
     // Generate the left AST node
     if (n->left)
     {
-        lft_reg = gen_ast(n->left);
+        lft_reg = gen_ast(n->left, n, NO_LABEL);
         // Clean up the left register
         free(n->left);
         n->left = NULL;
@@ -160,7 +222,7 @@ static int gen_ast(AST *n)
     // Generate the right AST node
     if (n->right)
     {
-        rgt_reg = gen_ast(n->right);
+        rgt_reg = gen_ast(n->right, n, NO_LABEL);
         // Clean up the right register
         free(n->right);
         n->right = NULL;
@@ -184,17 +246,35 @@ static int gen_ast(AST *n)
     case A_MOD:
         return gen_mod(lft_reg, rgt_reg);
     case A_EQ:
-        return gen_cmp(lft_reg, rgt_reg, "e");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "ne", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "e");
     case A_NE:
-        return gen_cmp(lft_reg, rgt_reg, "ne");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "e", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "ne");
     case A_LT:
-        return gen_cmp(lft_reg, rgt_reg, "l");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "ge", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "l");
     case A_LE:
-        return gen_cmp(lft_reg, rgt_reg, "le");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "g", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "le");
     case A_GT:
-        return gen_cmp(lft_reg, rgt_reg, "g");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "le", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "g");
     case A_GE:
-        return gen_cmp(lft_reg, rgt_reg, "ge");
+        if (prt && prt->type == A_IFELSE)
+            return gen_cmp_jump(lft_reg, rgt_reg, "l", lbl);
+        else
+            return gen_cmp(lft_reg, rgt_reg, "ge");
     case A_PRINT:
         gen_print(lft_reg);
         return NO_REG;
@@ -214,7 +294,7 @@ int gen_code(AST *n)
     gen_free_regs();
     gen_load_lib();
     gen_function_prologue("main");
-    reg = gen_ast(n);
+    reg = gen_ast(n, NULL, NO_LABEL);
     gen_function_epilogue();
     free(n);
     return reg;

@@ -7,6 +7,9 @@
 #include "data.h"
 #include "decl.h"
 
+static AST *primary();
+static AST *binary(int prec);
+
 // Return the precedence of an operator
 static int op_prec(TOKEN_TYPE typ)
 {
@@ -97,7 +100,7 @@ static AST *primary()
         break;
     case T_LPAREN:
         match(T_LPAREN);
-        n = expression();
+        n = binary(0);
         match(T_RPAREN);
         n = make_AST_unary(A_PAREN, n, NO_VALUE);
         break;

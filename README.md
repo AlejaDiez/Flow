@@ -94,11 +94,24 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Refactor AST node to include a middle child.
+Parse if-else statements.
 
--   Update `decl.h` file to update the AST node function signature.
--   Update `defs.h` file to include a middle child in the AST node.
--   Update `tree.c` file to include a middle child in the AST node.
+```flow
+if (condition) {
+    // code block
+} else if (condition) {
+    // code block
+} else {
+    // code block
+}
+```
+
+-   Add new test cases for if-else statements.
+-   Update the `decl.h` file to include the new functions that will be used to parse if-else statements.
+-   Update the `defs.h` file to add NO_LABEL constant.
+-   Update the `gen.c` and `x86_64.c` files to generate the assembly code for if-else statements.
+-   Update the `expr.c` file to check for ';' after expressions.
+-   Update the `stmt.c` file to parse if-else statements and refactor statement parsing functions.
 
 ## Contribution
 

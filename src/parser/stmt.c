@@ -7,21 +7,16 @@
 #include "data.h"
 #include "decl.h"
 
-// Add a statement to a sequence and return the new sequence, also check for a semi-colon
+static AST *statement();
+static AST *block_statement();
+
+// Add a statement to a sequence and return the new sequence
 static AST *add_seq(AST *seq, AST *stmt)
 {
     // Check if we have a statement
     if (!stmt)
     {
         return seq;
-    }
-    // Check if we have a semi-colon
-    switch (stmt->type)
-    {
-    case A_SEQ:
-        break;
-    default:
-        match(T_SEMICOLON);
     }
     // Check if we have a sequence
     if (!seq)
@@ -31,7 +26,19 @@ static AST *add_seq(AST *seq, AST *stmt)
     return make_AST_binary(A_SEQ, seq, stmt, NO_VALUE);
 }
 
-// Parse a variable assignment and return an AST
+// Parse an expression
+static AST *expression_statement()
+{
+    AST *n;
+
+    // Parse the expression
+    n = expression();
+    // Match the sintax
+    match(T_SEMICOLON);
+    return n;
+}
+
+// Parse a variable assignment
 static AST *assignment_statement()
 {
     AST *n, *lft, *rgt;
@@ -51,6 +58,37 @@ static AST *assignment_statement()
     lft = expression();
     // Create the AST
     n = make_AST_binary(A_ASSIGN, lft, rgt, NO_VALUE);
+    // Match the sintax
+    match(T_SEMICOLON);
+    return n;
+}
+
+// Parse an if else statement
+static AST *if_else_statement()
+{
+    AST *n, *cond, *true_stmt, *false_stmt = NULL;
+
+    // Match syntax
+    match(T_IF);
+    match(T_LPAREN);
+    // Parse the condition
+    cond = expression();
+    if (cond->type < A_EQ || cond->type > A_GE)
+        match_error("comparison or logical expression", "other expression");
+    // Match syntax
+    match(T_RPAREN);
+    // Parse the true statement
+    true_stmt = add_seq(statement(), NULL);
+    // Check if we have an else statement
+    if (Token.type == T_ELSE)
+    {
+        // Match syntax
+        match(T_ELSE);
+        // Parse the false statement
+        false_stmt = statement();
+    }
+    // Create the AST
+    n = make_AST_node(A_IFELSE, cond, true_stmt, false_stmt, NO_VALUE);
     return n;
 }
 
@@ -66,26 +104,29 @@ static AST *print_statement()
     expr = expression();
     // Match syntax
     match(T_RPAREN);
+    match(T_SEMICOLON);
     return make_AST_unary(A_PRINT, expr, NO_VALUE);
 }
 
 // Parse a statement
-AST *statement()
+static AST *statement()
 {
     switch (Token.type)
     {
     case T_LPAREN:
     case T_INTLIT:
-        return expression();
+        return expression_statement();
     case T_IDENT:
         if (look_ahead().type == T_ASSIGN)
         {
             return assignment_statement();
         }
-        return expression();
+        return expression_statement();
     case T_VAR:
         var_declaration();
         return NULL;
+    case T_IF:
+        return if_else_statement();
     case T_PRINT:
         return print_statement();
     case T_LBRACE:
@@ -97,7 +138,7 @@ AST *statement()
 }
 
 // Parse a block and return an AST
-AST *block_statement()
+static AST *block_statement()
 {
     AST *seq = NULL, *stmt = NULL;
 

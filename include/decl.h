@@ -14,6 +14,8 @@ int x86_64_alloc_reg();
 void x86_64_load_lib();
 void x86_64_function_prologue(const char *str);
 void x86_64_function_epilogue();
+void x86_64_label(int lbl);
+void x86_64_jump(int lbl);
 void x86_64_global(const char *str);
 int x86_64_store_global(int reg, const char *str);
 int x86_64_load_global(const char *str);
@@ -24,6 +26,7 @@ int x86_64_mul(int reg_1, int reg_2);
 int x86_64_div(int reg_1, int reg_2);
 int x86_64_mod(int reg_1, int reg_2);
 int x86_64_cmp(int reg_1, int reg_2, const char *cmp);
+int x86_64_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl);
 void x86_64_print(int reg);
 
 // parser/decl.c
@@ -33,8 +36,6 @@ void var_declaration();
 AST *expression();
 
 // parser/stmt.c
-AST *statement();
-AST *block_statement();
 AST *sequence();
 
 // scanner/scan.c

@@ -102,6 +102,18 @@ void x86_64_function_epilogue()
         "\n");
 }
 
+// Generate a label
+void x86_64_label(int lbl)
+{
+    fprintf(Output, "L%d:\n", lbl);
+}
+
+// Generate a jump to a label
+void x86_64_jump(int lbl)
+{
+    fprintf(Output, "\tjmp\tL%d\n", lbl);
+}
+
 // Generate the assembly code for a global variable
 void x86_64_global(const char *str)
 {
@@ -201,6 +213,15 @@ int x86_64_cmp(int reg_1, int reg_2, const char *cmp)
         regs[reg_2], regs[reg_1], cmp, bregs[reg_2], bregs[reg_2], regs[reg_2]);
     x86_64_free_reg(reg_1);
     return reg_2;
+}
+
+// Compare two registers and store the result in the first register and return the register number
+int x86_64_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl)
+{
+    fprintf(Output, "\tcmpq\t%s, %s\n", regs[reg_2], regs[reg_1]);
+    fprintf(Output, "\tj%s\tL%d\n", jmp, lbl);
+    x86_64_free_regs();
+    return NO_REG;
 }
 
 // Generate the assembly code for a print statement
