@@ -94,17 +94,11 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse block statements.
+Refactor AST node to include a middle child.
 
-```flow
-{
-    // code block
-}
-```
-
--   Update the `decl.h` file to include block_statement function.
--   Update the `stmt.c` file to parse block statements.
--   Update `input_2.flow` file to include block statements.
+-   Update `decl.h` file to update the AST node function signature.
+-   Update `defs.h` file to include a middle child in the AST node.
+-   Update `tree.c` file to include a middle child in the AST node.
 
 ## Contribution
 

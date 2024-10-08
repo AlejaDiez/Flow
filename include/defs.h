@@ -137,6 +137,7 @@ typedef struct AST
 {
     AST_TYPE type;
     struct AST *left;
+    struct AST *middle;
     struct AST *right;
     VALUE value;
 } AST;
