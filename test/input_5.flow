@@ -1,8 +1,0 @@
-var y: int;
-
-y = 2 - 4;
-
-if (y >= 0)
-    print(y);
-else
-    print(0);

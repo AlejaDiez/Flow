@@ -94,24 +94,17 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse if-else statements.
+Scan loop statements.
 
 ```flow
-if (condition) {
-    // code block
-} else if (condition) {
-    // code block
-} else {
+loop (condition) {
     // code block
 }
 ```
 
--   Add new test cases for if-else statements.
--   Update the `decl.h` file to include the new functions that will be used to parse if-else statements.
--   Update the `defs.h` file to add NO_LABEL constant.
--   Update the `gen.c` and `x86_64.c` files to generate the assembly code for if-else statements.
--   Update the `expr.c` file to check for ';' after expressions.
--   Update the `stmt.c` file to parse if-else statements and refactor statement parsing functions.
+-   Add new test cases for loop "while" statements.
+-   Update `defs.h` to include the new loop token.
+-   Update `scan.c` to scan the new loop token.
 
 ## Contribution
 

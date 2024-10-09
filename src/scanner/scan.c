@@ -147,6 +147,10 @@ static int keyword(const char *str)
         if (!strcmp(str, "int"))
             return T_INT;
         break;
+    case 'l':
+        if (!strcmp(str, "loop"))
+            return T_LOOP;
+        break;
     case 'p':
         if (!strcmp(str, "print"))
             return T_PRINT;

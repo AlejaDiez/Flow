@@ -53,6 +53,7 @@ typedef enum TOKEN_TYPE
     T_VAR,
     T_IF,
     T_ELSE,
+    T_LOOP,
     T_PRINT,
     // Punctuation
     T_COLON,
@@ -90,6 +91,7 @@ static const char *const TOKEN_STR[] = {
     "var",
     "if",
     "else",
+    "loop",
     "print",
     // Punctuation
     ":",
