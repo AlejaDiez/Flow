@@ -78,7 +78,7 @@ static AST *if_else_statement()
     // Match syntax
     match(T_RPAREN);
     // Parse the true statement
-    true_stmt = add_seq(statement(), NULL);
+    true_stmt = statement();
     // Check if we have an else statement
     if (Token.type == T_ELSE)
     {
@@ -89,6 +89,27 @@ static AST *if_else_statement()
     }
     // Create the AST
     n = make_AST_node(A_IFELSE, cond, true_stmt, false_stmt, NO_VALUE);
+    return n;
+}
+
+// Parse a loop statement
+static AST *loop_statement()
+{
+    AST *n, *cond, *stmt;
+
+    // Match syntax
+    match(T_LOOP);
+    match(T_LPAREN);
+    // Parse the condition
+    cond = expression();
+    if (cond->type < A_EQ || cond->type > A_GE)
+        match_error("comparison or logical expression", "other expression");
+    // Match syntax
+    match(T_RPAREN);
+    // Parse the statement
+    stmt = statement();
+    // Create the AST
+    n = make_AST_binary(A_LOOP, cond, stmt, NO_VALUE);
     return n;
 }
 
@@ -127,6 +148,8 @@ static AST *statement()
         return NULL;
     case T_IF:
         return if_else_statement();
+    case T_LOOP:
+        return loop_statement();
     case T_PRINT:
         return print_statement();
     case T_LBRACE:

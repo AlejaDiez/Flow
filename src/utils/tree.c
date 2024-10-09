@@ -42,3 +42,29 @@ AST *make_AST_leaf(AST_TYPE typ, VALUE val)
 {
     return make_AST_node(typ, NULL, NULL, NULL, val);
 }
+
+// Clean up the AST nodes
+void free_AST(AST *n)
+{
+    if (n)
+    {
+        free_AST(n->left);
+        free_AST(n->middle);
+        free_AST(n->right);
+        free(n);
+    }
+}
+
+// Clean up the AST nodes children
+void free_AST_chld(AST *n)
+{
+    if (n)
+    {
+        free(n->left);
+        n->left = NULL;
+        free(n->middle);
+        n->middle = NULL;
+        free(n->right);
+        n->right = NULL;
+    }
+}

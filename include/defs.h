@@ -131,6 +131,7 @@ typedef enum AST_TYPE
     A_ASSIGN,
     // Statements
     A_IFELSE,
+    A_LOOP,
     A_PRINT,
     // Grouping
     A_SEQ,

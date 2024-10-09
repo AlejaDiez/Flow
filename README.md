@@ -94,7 +94,7 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Scan loop statements.
+Parse loop statements.
 
 ```flow
 loop (condition) {
@@ -103,8 +103,10 @@ loop (condition) {
 ```
 
 -   Add new test cases for loop "while" statements.
--   Update `defs.h` to include the new loop token.
--   Update `scan.c` to scan the new loop token.
+-   Update `decl.h` to include new free_AST functions.
+-   Update `gen.c` and `x86_64.c` to generate code for loop statements.
+-   Update `stmt.c` to parse loop statements.
+-   Update `tree.c` to include new free_AST functions.
 
 ## Contribution
 
