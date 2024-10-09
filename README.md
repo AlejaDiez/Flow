@@ -94,19 +94,29 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse loop statements.
+Parse extended loop statements.
 
 ```flow
 loop (condition) {
     // code block
 }
+
+loop (initialization; condition) {
+    // code block
+}
+
+loop (condition; update) {
+    // code block
+}
+
+loop (initialization; condition; update) {
+    // code block
+}
 ```
 
--   Add new test cases for loop "while" statements.
--   Update `decl.h` to include new free_AST functions.
--   Update `gen.c` and `x86_64.c` to generate code for loop statements.
--   Update `stmt.c` to parse loop statements.
--   Update `tree.c` to include new free_AST functions.
+-   Update the `input_1.flow` file to include an example of the extended loop statement.
+-   Update the `decl.c` file to not check for the ";" character in the loop statement.
+-   Update the `stmt.c` file to parse the extended loop statement and also not check for the ";" character in the loop statement.
 
 ## Contribution
 

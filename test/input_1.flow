@@ -1,6 +1,22 @@
 var i: int;
 
-i = 0;
+# Numbers from 0 to 9, only odd
+loop (i = 0; i < 10; i = i + 1)
+    if (i % 2 != 0)
+        print(i);
+
+# Numbers from 10 to 0, only even
+loop (i >= 0; i = i - 1)
+    if (i % 2 == 0)
+        print(i);
+
+# Numbers from -10 to 0
+loop (i = 0 - 10; i <= 0) {
+    print(i);
+    i = i + 1;
+}
+
+# Numbers from 1 to 10
 loop (i <= 10) {
     print(i);
     i = i + 1;

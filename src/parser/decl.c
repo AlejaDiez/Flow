@@ -21,7 +21,6 @@ void var_declaration()
     // Match the sintax
     match(T_COLON);
     match(T_INT);
-    match(T_SEMICOLON);
     // Clean up
     free(ident.string);
 }

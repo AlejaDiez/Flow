@@ -7,7 +7,7 @@
 #include "data.h"
 #include "decl.h"
 
-static AST *statement();
+static AST *statement(bool req_semi);
 static AST *block_statement();
 
 // Add a statement to a sequence and return the new sequence
@@ -24,18 +24,6 @@ static AST *add_seq(AST *seq, AST *stmt)
         return stmt;
     }
     return make_AST_binary(A_SEQ, seq, stmt, NO_VALUE);
-}
-
-// Parse an expression
-static AST *expression_statement()
-{
-    AST *n;
-
-    // Parse the expression
-    n = expression();
-    // Match the sintax
-    match(T_SEMICOLON);
-    return n;
 }
 
 // Parse a variable assignment
@@ -58,8 +46,6 @@ static AST *assignment_statement()
     lft = expression();
     // Create the AST
     n = make_AST_binary(A_ASSIGN, lft, rgt, NO_VALUE);
-    // Match the sintax
-    match(T_SEMICOLON);
     return n;
 }
 
@@ -78,14 +64,14 @@ static AST *if_else_statement()
     // Match syntax
     match(T_RPAREN);
     // Parse the true statement
-    true_stmt = statement();
+    true_stmt = statement(true);
     // Check if we have an else statement
     if (Token.type == T_ELSE)
     {
         // Match syntax
         match(T_ELSE);
         // Parse the false statement
-        false_stmt = statement();
+        false_stmt = statement(true);
     }
     // Create the AST
     n = make_AST_node(A_IFELSE, cond, true_stmt, false_stmt, NO_VALUE);
@@ -95,21 +81,44 @@ static AST *if_else_statement()
 // Parse a loop statement
 static AST *loop_statement()
 {
-    AST *n, *cond, *stmt;
+    AST *n, *init = NULL, *cond, *upd = NULL, *stmt;
 
     // Match syntax
     match(T_LOOP);
     match(T_LPAREN);
-    // Parse the condition
-    cond = expression();
-    if (cond->type < A_EQ || cond->type > A_GE)
-        match_error("comparison or logical expression", "other expression");
+    // Try to parse the initialization
+    init = statement(false);
+    if (init->type >= A_EQ && init->type <= A_GE)
+    {
+        // We don't have a initialization statement
+        cond = init;
+        init = NULL;
+    }
+    // Check the condition
+    if (init)
+    {
+        match(T_SEMICOLON);
+        cond = expression();
+        if (cond->type < A_EQ || cond->type > A_GE)
+            match_error("comparison or logical expression", "other expression");
+    }
+    // Check if there is a update statement
+    if (Token.type == T_SEMICOLON)
+    {
+        match(T_SEMICOLON);
+        upd = statement(false);
+    }
     // Match syntax
     match(T_RPAREN);
     // Parse the statement
-    stmt = statement();
+    stmt = statement(true);
     // Create the AST
-    n = make_AST_binary(A_LOOP, cond, stmt, NO_VALUE);
+    n = stmt;
+    if (upd)
+        n = make_AST_binary(A_SEQ, n, upd, NO_VALUE);
+    n = make_AST_binary(A_LOOP, cond, n, NO_VALUE);
+    if (init)
+        n = make_AST_binary(A_SEQ, init, n, NO_VALUE);
     return n;
 }
 
@@ -125,39 +134,50 @@ static AST *print_statement()
     expr = expression();
     // Match syntax
     match(T_RPAREN);
-    match(T_SEMICOLON);
     return make_AST_unary(A_PRINT, expr, NO_VALUE);
 }
 
 // Parse a statement
-static AST *statement()
+static AST *statement(bool req_semi)
 {
+    AST *stmt = NULL;
+
     switch (Token.type)
     {
     case T_LPAREN:
     case T_INTLIT:
-        return expression_statement();
+        stmt = expression();
+        break;
     case T_IDENT:
         if (look_ahead().type == T_ASSIGN)
         {
-            return assignment_statement();
+            stmt = assignment_statement();
         }
-        return expression_statement();
+        else
+        {
+            stmt = expression();
+        }
+        break;
     case T_VAR:
         var_declaration();
-        return NULL;
+        break;
     case T_IF:
         return if_else_statement();
     case T_LOOP:
         return loop_statement();
     case T_PRINT:
-        return print_statement();
+        stmt = print_statement();
+        break;
     case T_LBRACE:
         return block_statement();
     default:
         unrecognized_token_error();
     }
-    return NULL;
+    if (req_semi)
+    {
+        match(T_SEMICOLON);
+    }
+    return stmt;
 }
 
 // Parse a block and return an AST
@@ -170,7 +190,7 @@ static AST *block_statement()
     // Parse the statements
     while (Token.type != T_RBRACE)
     {
-        stmt = statement();
+        stmt = statement(true);
         seq = add_seq(seq, stmt);
     }
     // Match the sintax
@@ -186,7 +206,7 @@ AST *sequence()
     // Parse the statements
     while (Token.type != T_EOF)
     {
-        stmt = statement();
+        stmt = statement(true);
         seq = add_seq(seq, stmt);
     }
     // Match the sintax
