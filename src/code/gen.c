@@ -7,6 +7,8 @@
 #include "data.h"
 #include "decl.h"
 
+static int gen_ast(AST *n, AST *prt, int lbl);
+
 // Generate a label
 static int label()
 {
@@ -34,9 +36,15 @@ static int gen_alloc_reg()
 }
 
 // Load standard librearies functions
-void gen_load_lib()
+static void gen_load_lib()
 {
     x86_64_load_lib();
+}
+
+// Generate the assembly code for the main function prologue
+static void gen_main_function_prologue()
+{
+    x86_64_main_function_prologue();
 }
 
 // Generate a label
@@ -52,27 +60,27 @@ static void gen_jump(int lbl)
 }
 
 // Generate the assembly code for a global variable
-void gen_global(const char *str)
+void gen_global(int id)
 {
-    x86_64_global(str);
+    x86_64_global(id);
 }
 
 // Store a register value in a global variable and return the register number
-static int gen_store_global(int reg, const char *str)
+static int gen_store_global(int reg, int id)
 {
-    return x86_64_store_global(reg, str);
+    return x86_64_store_global(reg, id);
 }
 
 // Load a global variable into a register and return the register number
-static int gen_load_global(const char *str)
+static int gen_load_global(int id)
 {
-    return x86_64_load_global(str);
+    return x86_64_load_global(id);
 }
 
 // Generate the assembly code for a function prologue
-static void gen_function_prologue(const char *str)
+static void gen_function_prologue(int id)
 {
-    x86_64_function_prologue(str);
+    x86_64_function_prologue(id);
 }
 
 // Generate the assembly code for a function epilogue
@@ -82,10 +90,9 @@ static void gen_function_epilogue()
 }
 
 // Generate the assembly code for a function
-void gen_function(const char *str, AST *n)
+void gen_function(int id, AST *n)
 {
-    gen_free_regs();
-    gen_function_prologue(str);
+    gen_function_prologue(id);
     gen_ast(n, NULL, NO_LABEL);
     gen_function_epilogue();
 }
@@ -145,7 +152,7 @@ static void gen_print(int reg)
 }
 
 // Generate the assembly code for an abstract syntax tree and return the register number
-int gen_ast(AST *n, AST *prt, int lbl)
+static int gen_ast(AST *n, AST *prt, int lbl)
 {
     // Register numbers
     int lft_reg, rgt_reg;
@@ -173,7 +180,7 @@ int gen_ast(AST *n, AST *prt, int lbl)
         // Generate the left AST node
         lft_reg = gen_ast(n->left, n, NO_LABEL);
         // Store the value in the global variable
-        gen_store_global(lft_reg, GlobalSymbols[n->right->value.integer].name);
+        gen_store_global(lft_reg, n->right->value.integer);
         gen_free_reg(lft_reg);
         // Clean up the AST nodes
         free_AST_chld(n);
@@ -251,7 +258,7 @@ int gen_ast(AST *n, AST *prt, int lbl)
     case A_INTLIT:
         return gen_load_int(n->value.integer);
     case A_IDENT:
-        return gen_load_global(GlobalSymbols[n->value.integer].name);
+        return gen_load_global(n->value.integer);
     case A_ADD:
         return gen_add(lft_reg, rgt_reg);
     case A_SUB:
@@ -301,4 +308,18 @@ int gen_ast(AST *n, AST *prt, int lbl)
         compile_error("unknown AST node type");
     }
     return NO_REG;
+}
+
+// Generate the assembly code for the entire program
+void gen_code()
+{
+    AST *seq;
+
+    gen_free_regs();
+    gen_load_lib();
+    seq = sequence();
+    gen_main_function_prologue();
+    gen_ast(seq, NULL, NO_LABEL);
+    gen_function_epilogue();
+    free_AST(seq);
 }

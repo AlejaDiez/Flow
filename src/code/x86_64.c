@@ -76,6 +76,18 @@ void x86_64_load_lib()
         "\n");
 }
 
+// Generate the assembly code for the main function
+void x86_64_main_function_prologue()
+{
+    fprintf(
+        Output,
+        "\t.section __TEXT, __text\n"
+        "\t.globl _main\n"
+        "_main:\n"
+        "\tpushq\t%%rbp\n"
+        "\tmovq\t%%rsp, %%rbp\n");
+}
+
 // Generate a label
 void x86_64_label(int lbl)
 {
@@ -89,45 +101,50 @@ void x86_64_jump(int lbl)
 }
 
 // Generate the assembly code for a global variable
-void x86_64_global(const char *str)
+void x86_64_global(int id)
 {
+    const SYMBOL sym = GlobalSymbols[id];
+
     fprintf(
         Output,
         "\t.section __DATA, __bss\n"
         "\t.comm\t%s,8,8\n"
         "\n",
-        str);
+        sym.name);
 }
 
 // Store a register value in a global variable and return the register number
-int x86_64_store_global(int reg, const char *str)
+int x86_64_store_global(int reg, int id)
 {
-    fprintf(Output, "\tmovq\t%s, %s(\%%rip)\n", regs[reg], str);
+    const SYMBOL sym = GlobalSymbols[id];
+
+    fprintf(Output, "\tmovq\t%s, %s(\%%rip)\n", regs[reg], sym.name);
     return reg;
 }
 
 // Load a global variable into a register and return the register number
-int x86_64_load_global(const char *str)
+int x86_64_load_global(int id)
 {
+    const SYMBOL sym = GlobalSymbols[id];
     int reg = x86_64_alloc_reg();
 
-    fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", str, regs[reg]);
+    fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", sym.name, regs[reg]);
     return reg;
 }
 
 // Generate the assembly code for a function prologue
-void x86_64_function_prologue(const char *str)
+void x86_64_function_prologue(int id)
 {
-    const char *prefix = strcmp(str, "main") == 0 ? "_" : "__";
+    const SYMBOL sym = GlobalSymbols[id];
 
     fprintf(
         Output,
         "\t.section __TEXT, __text\n"
-        "\t.globl %s%s\n"
-        "%s%s:\n"
+        "\t.globl __%s\n"
+        "__%s:\n"
         "\tpushq\t%%rbp\n"
         "\tmovq\t%%rsp, %%rbp\n",
-        prefix, str, prefix, str);
+        sym.name, sym.name);
 }
 
 // Generate the assembly code for a function epilogue

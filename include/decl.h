@@ -4,22 +4,22 @@
  ********************************************************************************/
 
 // code/gen.c
-void gen_load_lib();
-void gen_global(const char *str);
-void gen_function(const char *str, AST *n);
-int gen_ast(AST *n, AST *prt, int lbl);
+void gen_global(int id);
+void gen_function(int id, AST *n);
+void gen_code();
 
 // code/x86_64.c
 void x86_64_free_regs();
 void x86_64_free_reg(int reg);
 int x86_64_alloc_reg();
 void x86_64_load_lib();
+void x86_64_main_function_prologue();
 void x86_64_label(int lbl);
 void x86_64_jump(int lbl);
-void x86_64_global(const char *str);
-int x86_64_store_global(int reg, const char *str);
-int x86_64_load_global(const char *str);
-void x86_64_function_prologue(const char *str);
+void x86_64_global(int id);
+int x86_64_store_global(int reg, int id);
+int x86_64_load_global(int id);
+void x86_64_function_prologue(int id);
 void x86_64_function_epilogue();
 int x86_64_load_int(int val);
 int x86_64_add(int reg_1, int reg_2);
@@ -32,6 +32,7 @@ int x86_64_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl);
 void x86_64_print(int reg);
 
 // parser/decl.c
+PRIMITIVE_TYPE tok_to_primitive(TOKEN_TYPE typ);
 void var_declaration();
 void fun_declaration();
 

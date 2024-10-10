@@ -34,17 +34,6 @@ void init()
     scan();
 }
 
-// Compiler
-void execute()
-{
-    AST *seq;
-
-    gen_load_lib();
-    seq = sequence();
-    gen_function("main", seq);
-    free_AST(seq);
-}
-
 // Clean up the compiler
 void end()
 {
@@ -80,7 +69,7 @@ int main(int argc, char *argv[])
     free(name);
     // Compile the input file
     init();
-    execute();
+    gen_code();
     end();
     return 0;
 }
