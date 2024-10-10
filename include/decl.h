@@ -4,21 +4,23 @@
  ********************************************************************************/
 
 // code/gen.c
+void gen_load_lib();
 void gen_global(const char *str);
-int gen_code(AST *n);
+void gen_function(const char *str, AST *n);
+int gen_ast(AST *n, AST *prt, int lbl);
 
 // code/x86_64.c
 void x86_64_free_regs();
 void x86_64_free_reg(int reg);
 int x86_64_alloc_reg();
 void x86_64_load_lib();
-void x86_64_function_prologue(const char *str);
-void x86_64_function_epilogue();
 void x86_64_label(int lbl);
 void x86_64_jump(int lbl);
 void x86_64_global(const char *str);
 int x86_64_store_global(int reg, const char *str);
 int x86_64_load_global(const char *str);
+void x86_64_function_prologue(const char *str);
+void x86_64_function_epilogue();
 int x86_64_load_int(int val);
 int x86_64_add(int reg_1, int reg_2);
 int x86_64_sub(int reg_1, int reg_2);
@@ -31,11 +33,14 @@ void x86_64_print(int reg);
 
 // parser/decl.c
 void var_declaration();
+void fun_declaration();
 
 // parser/expr.c
 AST *expression();
 
 // parser/stmt.c
+AST *statement(bool req_semi);
+AST *block_statement();
 AST *sequence();
 
 // scanner/scan.c

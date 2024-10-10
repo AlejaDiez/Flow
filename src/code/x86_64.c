@@ -76,32 +76,6 @@ void x86_64_load_lib()
         "\n");
 }
 
-// Generate the assembly code for a function prologue
-void x86_64_function_prologue(const char *str)
-{
-    const char *prefix = strcmp(str, "main") == 0 ? "_" : "__";
-
-    fprintf(
-        Output,
-        "\t.section __TEXT, __text\n"
-        "\t.globl %s%s\n"
-        "%s%s:\n"
-        "\tpushq\t%%rbp\n"
-        "\tmovq\t%%rsp, %%rbp\n",
-        prefix, str, prefix, str);
-}
-
-// Generate the assembly code for a function epilogue
-void x86_64_function_epilogue()
-{
-    fprintf(
-        Output,
-        "\tmovl\t$0, %%eax\n"
-        "\tpopq\t%%rbp\n"
-        "\tret\n"
-        "\n");
-}
-
 // Generate a label
 void x86_64_label(int lbl)
 {
@@ -139,6 +113,32 @@ int x86_64_load_global(const char *str)
 
     fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", str, regs[reg]);
     return reg;
+}
+
+// Generate the assembly code for a function prologue
+void x86_64_function_prologue(const char *str)
+{
+    const char *prefix = strcmp(str, "main") == 0 ? "_" : "__";
+
+    fprintf(
+        Output,
+        "\t.section __TEXT, __text\n"
+        "\t.globl %s%s\n"
+        "%s%s:\n"
+        "\tpushq\t%%rbp\n"
+        "\tmovq\t%%rsp, %%rbp\n",
+        prefix, str, prefix, str);
+}
+
+// Generate the assembly code for a function epilogue
+void x86_64_function_epilogue()
+{
+    fprintf(
+        Output,
+        "\tmovl\t$0, %%eax\n"
+        "\tpopq\t%%rbp\n"
+        "\tret\n"
+        "\n");
 }
 
 // Load an integer literal value into a register and return the register number

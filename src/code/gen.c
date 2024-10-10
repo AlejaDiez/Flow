@@ -34,21 +34,9 @@ static int gen_alloc_reg()
 }
 
 // Load standard librearies functions
-static void gen_load_lib()
+void gen_load_lib()
 {
     x86_64_load_lib();
-}
-
-// Generate the assembly code for a function prologue
-static void gen_function_prologue(const char *str)
-{
-    x86_64_function_prologue(str);
-}
-
-// Generate the assembly code for a function epilogue
-static void gen_function_epilogue()
-{
-    x86_64_function_epilogue();
 }
 
 // Generate a label
@@ -79,6 +67,27 @@ static int gen_store_global(int reg, const char *str)
 static int gen_load_global(const char *str)
 {
     return x86_64_load_global(str);
+}
+
+// Generate the assembly code for a function prologue
+static void gen_function_prologue(const char *str)
+{
+    x86_64_function_prologue(str);
+}
+
+// Generate the assembly code for a function epilogue
+static void gen_function_epilogue()
+{
+    x86_64_function_epilogue();
+}
+
+// Generate the assembly code for a function
+void gen_function(const char *str, AST *n)
+{
+    gen_free_regs();
+    gen_function_prologue(str);
+    gen_ast(n, NULL, NO_LABEL);
+    gen_function_epilogue();
 }
 
 // Load an integer literal value into a register and return the register number
@@ -136,7 +145,7 @@ static void gen_print(int reg)
 }
 
 // Generate the assembly code for an abstract syntax tree and return the register number
-static int gen_ast(AST *n, AST *prt, int lbl)
+int gen_ast(AST *n, AST *prt, int lbl)
 {
     // Register numbers
     int lft_reg, rgt_reg;
@@ -292,18 +301,4 @@ static int gen_ast(AST *n, AST *prt, int lbl)
         compile_error("unknown AST node type");
     }
     return NO_REG;
-}
-
-// Generate the assembly code for a program
-int gen_code(AST *n)
-{
-    int reg;
-
-    gen_free_regs();
-    gen_load_lib();
-    gen_function_prologue("main");
-    reg = gen_ast(n, NULL, NO_LABEL);
-    gen_function_epilogue();
-    free_AST(n);
-    return reg;
 }

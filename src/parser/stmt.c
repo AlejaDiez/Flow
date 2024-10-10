@@ -7,9 +7,6 @@
 #include "data.h"
 #include "decl.h"
 
-static AST *statement(bool req_semi);
-static AST *block_statement();
-
 // Add a statement to a sequence and return the new sequence
 static AST *add_seq(AST *seq, AST *stmt)
 {
@@ -138,7 +135,7 @@ static AST *print_statement()
 }
 
 // Parse a statement
-static AST *statement(bool req_semi)
+AST *statement(bool req_semi)
 {
     AST *stmt = NULL;
 
@@ -161,6 +158,9 @@ static AST *statement(bool req_semi)
     case T_VAR:
         var_declaration();
         break;
+    case T_FUN:
+        fun_declaration();
+        return NULL;
     case T_IF:
         return if_else_statement();
     case T_LOOP:
@@ -181,7 +181,7 @@ static AST *statement(bool req_semi)
 }
 
 // Parse a block and return an AST
-static AST *block_statement()
+AST *block_statement()
 {
     AST *seq = NULL, *stmt = NULL;
 

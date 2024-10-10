@@ -39,8 +39,10 @@ void execute()
 {
     AST *seq;
 
+    gen_load_lib();
     seq = sequence();
-    gen_code(seq);
+    gen_function("main", seq);
+    free_AST(seq);
 }
 
 // Clean up the compiler

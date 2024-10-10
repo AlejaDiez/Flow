@@ -94,29 +94,21 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Parse extended loop statements.
+Parse function declarations.
 
 ```flow
-loop (condition) {
-    // code block
-}
-
-loop (initialization; condition) {
-    // code block
-}
-
-loop (condition; update) {
-    // code block
-}
-
-loop (initialization; condition; update) {
-    // code block
+fun functionName(): void {
+    // Function body
 }
 ```
 
--   Update the `input_1.flow` file to include an example of the extended loop statement.
--   Update the `decl.c` file to not check for the ";" character in the loop statement.
--   Update the `stmt.c` file to parse the extended loop statement and also not check for the ";" character in the loop statement.
+-   Add new test cases for function declarations.
+-   Update the `decl.h` file to include function declarations and convert some static functions to public functions.
+-   Update the `defs.h` file to include function declarations scanner tokens.
+-   Update the `gen.c` and `x86_64.c` file to include function declarations and change compilation process.
+-   Update the `decl.c` and `stmt.c` file to parse function declarations.
+-   Update the `scan.c` file to scan function calls.
+-   Update the `main.c` file to change the compilation process.
 
 ## Contribution
 

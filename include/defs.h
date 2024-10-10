@@ -48,9 +48,11 @@ typedef enum TOKEN_TYPE
     T_INTLIT,
     T_IDENT,
     // Types
+    T_VOID,
     T_INT,
     // Keywords
     T_VAR,
+    T_FUN,
     T_IF,
     T_ELSE,
     T_LOOP,
@@ -86,9 +88,11 @@ static const char *const TOKEN_STR[] = {
     "integer",
     "identifier",
     // Types
+    "void",
     "int",
     // Keywords
     "var",
+    "fun",
     "if",
     "else",
     "loop",
