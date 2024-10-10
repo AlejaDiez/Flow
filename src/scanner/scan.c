@@ -137,6 +137,10 @@ static int keyword(const char *str)
 {
     switch (*str)
     {
+    case 'b':
+        if (!strcmp(str, "bool"))
+            return T_BOOL;
+        break;
     case 'e':
         if (!strcmp(str, "else"))
             return T_ELSE;
