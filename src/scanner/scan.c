@@ -146,6 +146,8 @@ static int keyword(const char *str)
             return T_ELSE;
         break;
     case 'f':
+        if (!strcmp(str, "false"))
+            return T_FALSE;
         if (!strcmp(str, "fun"))
             return T_FUN;
         break;
@@ -162,6 +164,10 @@ static int keyword(const char *str)
     case 'p':
         if (!strcmp(str, "print"))
             return T_PRINT;
+        break;
+    case 't':
+        if (!strcmp(str, "true"))
+            return T_TRUE;
         break;
     case 'v':
         if (!strcmp(str, "var"))

@@ -22,6 +22,7 @@
 typedef union VALUE
 {
     int integer;
+    bool boolean;
     char *string;
     void *pointer;
 } VALUE;
@@ -47,6 +48,8 @@ typedef enum TOKEN_TYPE
     T_ASSIGN,
     // Literals and Identifiers
     T_INTLIT,
+    T_TRUE,
+    T_FALSE,
     T_IDENT,
     // Types
     T_VOID,
@@ -88,6 +91,8 @@ static const char *const TOKEN_STR[] = {
     "=",
     // Literals and Identifiers
     "integer",
+    "true",
+    "false",
     "identifier",
     // Types
     "void",
@@ -128,6 +133,7 @@ typedef enum AST_TYPE
 {
     // Literals and Identifiers
     A_INTLIT,
+    A_BOOLLIT,
     A_IDENT,
     // Arithmetic Operations
     A_ADD,

@@ -94,12 +94,10 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Refactor function and variable declarations.
+Scan boolean literals.
 
--   Update the `decl.h` file to update the declaration functions with the id of the symbol instead of the symbol name.
--   Update the `gen.c` and `x86_64.c` file to update the declaration functions with the id of the symbol instead of the symbol name and add new "gen_code" function to generate the code for the entire program.
--   Update the `decl.c` file to update the declaration functions with the id of the symbol instead of the symbol name.
--   Update the `main.c` file to update the compilation process with the new "gen_code" function.
+-   Update the `defs.h` file to include the boolean literals.
+-   Update the `scan.c` file to scan boolean literals.
 
 ## Contribution
 
