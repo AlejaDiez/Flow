@@ -1,0 +1,7 @@
+var a: int;
+var b: int;
+var c: bool;
+
+a = 0;
+b = 1;
+c = a; # Error: Type mismatch in assignment

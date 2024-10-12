@@ -12,11 +12,10 @@
 
 #define MAX_LEN 256
 #define MAX_SYM 1024
-#define NO_PRIMITIVE -1
 #define NO_VALUE \
     (VALUE) { .pointer = NULL }
 #define NO_REG -1
-#define NO_LABEL -1
+#define NO_PRIMITIVE -1
 
 // Values
 typedef union VALUE
@@ -127,6 +126,11 @@ typedef enum PRIMITIVE_TYPE
     P_BOOL,
     P_INT
 } PRIMITIVE_TYPE;
+
+static const char *const PRIMITIVE_TYPE_STR[] = {
+    "void",
+    "bool",
+    "int"};
 
 // Abstract Syntax Tree
 typedef enum AST_TYPE

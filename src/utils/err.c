@@ -72,9 +72,14 @@ static void error(const char *typ, const char *msg, bool line, int cod)
     printf("\x1b[31m%s:\x1b[0m %s", typ, msg);
     if (line)
     {
-        printf(" (%s:%d:%d)", Name, Line, Column);
+        printf(" (%s:%d:%d)", InputName, Line, Column);
     }
     printf("\n");
+    free(InputName);
+    fclose(Input);
+    fclose(Output);
+    remove(OutputName);
+    free(OutputName);
     exit(cod);
 }
 

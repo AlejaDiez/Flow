@@ -7,23 +7,6 @@
 #include "data.h"
 #include "decl.h"
 
-// Operator type to AST type
-PRIMITIVE_TYPE tok_to_primitive(TOKEN_TYPE typ)
-{
-    switch (typ)
-    {
-    case T_VOID:
-        return P_VOID;
-    case T_BOOL:
-        return P_BOOL;
-    case T_INT:
-        return P_INT;
-    default:
-        match_error("primitive type", TOKEN_STR[typ]);
-        return NO_PRIMITIVE;
-    }
-}
-
 // Parse a variable declaration
 void var_declaration()
 {
@@ -35,7 +18,7 @@ void var_declaration()
     ident = match(T_IDENT);
     // Match the sintax
     match(T_COLON);
-    typ = tok_to_primitive(Token.type);
+    typ = tok_to_prim(Token.type);
     if (typ == P_VOID)
         syntax_error("variable cannot be of type void");
     scan();
@@ -64,7 +47,7 @@ void fun_declaration()
     if (Token.type == T_COLON)
     {
         match(T_COLON);
-        typ = tok_to_primitive(Token.type);
+        typ = tok_to_prim(Token.type);
         scan();
     }
     else

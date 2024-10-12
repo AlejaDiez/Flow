@@ -105,12 +105,24 @@ void x86_64_global(int id)
 {
     const SYMBOL sym = GlobalSymbols[id];
 
-    fprintf(
-        Output,
-        "\t.section __DATA, __bss\n"
-        "\t.comm\t%s,8,8\n"
-        "\n",
-        sym.name);
+    if (sym.primitive == P_BOOL) // 1 byte
+    {
+        fprintf(
+            Output,
+            "\t.section __DATA, __bss\n"
+            "\t.comm\t%s,1,1\n"
+            "\n",
+            sym.name);
+    }
+    else if (sym.primitive == P_INT) // 8 bytes
+    {
+        fprintf(
+            Output,
+            "\t.section __DATA, __bss\n"
+            "\t.comm\t%s,8,8\n"
+            "\n",
+            sym.name);
+    }
 }
 
 // Store a register value in a global variable and return the register number
@@ -118,7 +130,14 @@ int x86_64_store_global(int reg, int id)
 {
     const SYMBOL sym = GlobalSymbols[id];
 
-    fprintf(Output, "\tmovq\t%s, %s(\%%rip)\n", regs[reg], sym.name);
+    if (sym.primitive == P_BOOL) // 1 byte
+    {
+        fprintf(Output, "\tmovb\t%s, %s(\%%rip)\n", bregs[reg], sym.name);
+    }
+    else if (sym.primitive == P_INT) // 8 bytes
+    {
+        fprintf(Output, "\tmovq\t%s, %s(\%%rip)\n", regs[reg], sym.name);
+    }
     return reg;
 }
 
@@ -128,7 +147,14 @@ int x86_64_load_global(int id)
     const SYMBOL sym = GlobalSymbols[id];
     int reg = x86_64_alloc_reg();
 
-    fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", sym.name, regs[reg]);
+    if (sym.primitive == P_BOOL) // 1 byte
+    {
+        fprintf(Output, "\tmovzbq\t%s(\%%rip), %s\n", sym.name, regs[reg]);
+    }
+    else if (sym.primitive == P_INT) // 8 bytes
+    {
+        fprintf(Output, "\tmovq\t%s(\%%rip), %s\n", sym.name, regs[reg]);
+    }
     return reg;
 }
 
@@ -232,11 +258,11 @@ int x86_64_cmp(int reg_1, int reg_2, const char *cmp)
     return reg_2;
 }
 
-// Compare two registers and store the result in the first register and return the register number
-int x86_64_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl)
+// Check if one register is true and jump to a label if it is not
+int x86_64_cond_jump(int reg, int lbl)
 {
-    fprintf(Output, "\tcmpq\t%s, %s\n", regs[reg_2], regs[reg_1]);
-    fprintf(Output, "\tj%s\tL%d\n", jmp, lbl);
+    fprintf(Output, "\tcmpq\t$1, %s\n", regs[reg]);
+    fprintf(Output, "\tjne\tL%d\n", lbl);
     x86_64_free_regs();
     return NO_REG;
 }

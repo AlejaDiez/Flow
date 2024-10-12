@@ -28,11 +28,10 @@ int x86_64_mul(int reg_1, int reg_2);
 int x86_64_div(int reg_1, int reg_2);
 int x86_64_mod(int reg_1, int reg_2);
 int x86_64_cmp(int reg_1, int reg_2, const char *cmp);
-int x86_64_cmp_jump(int reg_1, int reg_2, const char *jmp, int lbl);
+int x86_64_cond_jump(int reg, int lbl);
 void x86_64_print(int reg);
 
 // parser/decl.c
-PRIMITIVE_TYPE tok_to_primitive(TOKEN_TYPE typ);
 void var_declaration();
 void fun_declaration();
 
@@ -43,6 +42,12 @@ AST *expression();
 AST *statement(bool req_semi);
 AST *block_statement();
 AST *sequence();
+
+// parser/typs.c
+PRIMITIVE_TYPE tok_to_prim(TOKEN_TYPE typ);
+PRIMITIVE_TYPE op_to_prim(AST_TYPE typ);
+void match_primitive(PRIMITIVE_TYPE lft, PRIMITIVE_TYPE rgt);
+void match_primitive_op(PRIMITIVE_TYPE lft, PRIMITIVE_TYPE rgt, AST_TYPE op);
 
 // scanner/scan.c
 void scan();

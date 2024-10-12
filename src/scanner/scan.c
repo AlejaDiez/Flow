@@ -311,15 +311,21 @@ void scan()
             str = scan_ident(c);
             type = keyword(str);
             Token.type = type;
+            Token.value = NO_VALUE;
             if (type == T_IDENT)
             {
                 Token.value.string = str;
+                break;
             }
-            else
+            else if (type == T_TRUE)
             {
-                Token.value = NO_VALUE;
-                free(str);
+                Token.value.boolean = true;
             }
+            else if (type == T_FALSE)
+            {
+                Token.value.boolean = false;
+            }
+            free(str);
             break;
         }
         // Otherwise, it's an error

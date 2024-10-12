@@ -41,6 +41,8 @@ static AST *assignment_statement()
     match(T_ASSIGN);
     // Parse the expression
     lft = expression();
+    // Check if the types are compatible
+    match_primitive(GlobalSymbols[id].primitive, lft->primitive);
     // Create the AST
     n = make_AST_binary(A_ASSIGN, NO_PRIMITIVE, lft, rgt, NO_VALUE);
     return n;
@@ -56,8 +58,8 @@ static AST *if_else_statement()
     match(T_LPAREN);
     // Parse the condition
     cond = expression();
-    if (cond->type < A_EQ || cond->type > A_GE)
-        match_error("comparison or logical expression", "other expression");
+    if (cond->primitive != P_BOOL)
+        match_error("boolean expression", "other expression");
     // Match syntax
     match(T_RPAREN);
     // Parse the true statement
@@ -85,7 +87,7 @@ static AST *loop_statement()
     match(T_LPAREN);
     // Try to parse the initialization
     init = statement(false);
-    if (init->type >= A_EQ && init->type <= A_GE)
+    if (init->primitive == P_BOOL)
     {
         // We don't have a initialization statement
         cond = init;
@@ -96,8 +98,8 @@ static AST *loop_statement()
     {
         match(T_SEMICOLON);
         cond = expression();
-        if (cond->type < A_EQ || cond->type > A_GE)
-            match_error("comparison or logical expression", "other expression");
+        if (cond->primitive != P_BOOL)
+            match_error("boolean expression", "other expression");
     }
     // Check if there is a update statement
     if (Token.type == T_SEMICOLON)
@@ -143,6 +145,8 @@ AST *statement(bool req_semi)
     {
     case T_LPAREN:
     case T_INTLIT:
+    case T_TRUE:
+    case T_FALSE:
         stmt = expression();
         break;
     case T_IDENT:

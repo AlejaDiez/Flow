@@ -37,36 +37,37 @@ void init()
 // Clean up the compiler
 void end()
 {
-    free(Name);
+    free(InputName);
     fclose(Input);
+    free(OutputName);
     fclose(Output);
 }
 
 // Main entry point
 int main(int argc, char *argv[])
 {
-    char *name, *ext;
+    char *ext;
 
     // Check if we have an input file
     if (argc < 2)
         fatal("no input files", EX_USAGE);
     // Input file
-    Name = strdup(argv[1]);
-    Input = fopen(Name, "r");
+    InputName = strdup(argv[1]);
+    Input = fopen(InputName, "r");
     if (Input == NULL)
         fatal("cannot open input file", EX_NOINPUT);
-    ext = strrchr(Name, '.');
+    ext = strrchr(InputName, '.');
     if (ext == NULL || strcmp(ext, ".flow") != 0)
         fatal("input file must have a '.flow' extension", EX_USAGE);
     // Output file
-    name = (char *)malloc((strlen(Name) - 2) * sizeof(char));
-    strncpy(name, Name, ext - Name);
-    name[ext - Name] = '\0';
-    strcat(name, ".s");
-    Output = fopen(name, "w");
+    OutputName = (char *)malloc((strlen(InputName) - 2) * sizeof(char));
+    strncpy(OutputName, InputName, ext - InputName);
+    OutputName[ext - OutputName] = '\0';
+    strcat(OutputName, ".s");
+    Output = fopen(OutputName, "w");
     if (Output == NULL)
         fatal("unable to create output file", EX_OSERR);
-    free(name);
+    ;
     // Compile the input file
     init();
     gen_code();
