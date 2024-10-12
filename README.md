@@ -94,16 +94,9 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Add support for types, including "int" and "bool", also solve some bugs in the parser and change the way to handel conditional expressions in if-else and loop statements.
+Add syntax highlighting and snippets for Flow in Visual Studio Code.
 
--   Add new `typs.c` file to handle the types.
--   Add new test to check the new types and conditional expressions.
--   Update the `data.h` file to add "OutputName".
--   Update the `decl.h` add types functions and change the way to handle conditional expressions.
--   Update the `defs.h` file to add primitive types string and delete NO_LABEL.
--   Update the `gen.c` and `x86_64.c` to include the new types and change the way to handle conditional expressions.
--   Update the `decl.c`, `expr.c`, `stmt.c` and `scan.c` files to include the new types check.
--   Update the `err.c` file to close files and remove the output file if an error occurs.
+-   Create a new extension for vscode, located in the `extension` directory. To install it, you must add the extension folder to the vscode extensions directory.
 
 ## Contribution
 

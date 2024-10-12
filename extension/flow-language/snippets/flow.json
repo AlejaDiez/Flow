@@ -1,0 +1,67 @@
+{
+    ".source.flow": {
+        "variable": {
+            "prefix": "var",
+            "description": "Insert a variable declaration.",
+            "body": [
+                "var ${1:name}: ${2:type};",
+                "",
+                "${1:name} = ${3:value};"
+            ]
+        },
+        "function": {
+            "prefix": "fun",
+            "description": "Insert a function.",
+            "body": [
+                "fun ${1:name}(): ${2:type} {",
+                "    ${3:# code}",
+                "}"
+            ]
+        },
+        "if": {
+            "prefix": "if",
+            "description": "Insert an if statement.",
+            "body": [
+                "if (${1:condition}) {",
+                "    ${2:# code}",
+                "}"
+            ]
+        },
+        "if-else": {
+            "prefix": "ifelse",
+            "description": "Insert an if statement with an else block.",
+            "body": [
+                "if (${1:condition}) {",
+                "    ${2:# true code}",
+                "} else {",
+                "    ${3:# false code}",
+                "}"
+            ]
+        },
+        "loop": {
+            "prefix": "loop",
+            "description": "Insert a loop statement.",
+            "body": [
+                "loop (${1:condition}) {",
+                "    ${2:# code}",
+                "}"
+            ]
+        },
+        "extended-loop": {
+            "prefix": "extloop",
+            "description": "Insert a extended loop statement.",
+            "body": [
+                "loop (${1:initialization}; ${2:condition}; ${3:update}) {",
+                "    ${4:# code}",
+                "}"
+            ]
+        },
+        "print": {
+            "prefix": "print",
+            "description": "Insert a print statement.",
+            "body": [
+                "print(${1:message});"
+            ]
+        }
+    }
+}

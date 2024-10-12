@@ -1,0 +1,17 @@
+var i: int;
+
+fun a(): void {
+    print(1);
+}
+
+loop (false) {
+    if (a > 0) {
+        print(1);
+    } else  {
+        print(2);
+    }
+    print(1);
+}
+loop (i = 0; i < 10; i = i + 1) {
+    print(1);
+}

@@ -1,7 +1,7 @@
-var a: int;
-var b: int;
-var c: bool;
-
-a = 0;
-b = 1;
-c = a; # Error: Type mismatch in assignment
+if (0 > 1) {
+    print(0);
+} else if (0 < 1) {
+    print(1);
+} else {
+    print(2);
+}

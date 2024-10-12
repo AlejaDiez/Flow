@@ -1,5 +1,6 @@
 var a: int;
+var b: bool;
 
-loop (a = 0; true; a = a + 1) {
-    print(a);
-}
+a = 0;
+b = true;
+ 

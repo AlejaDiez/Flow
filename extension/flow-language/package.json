@@ -1,0 +1,61 @@
+{
+    "name": "flow-language",
+    "displayName": "Flow",
+    "description": "Flow language support and debugger for Visual Studio Code.",
+    "version": "0.0.0",
+    "publisher": "AlejaDiez",
+    "engines": {
+        "vscode": "^1.94.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "keywords": [
+        "flow"
+    ],
+    "icon": "flow.png",
+    "main": "./out/extension.js",
+    "contributes": {
+        "configurationDefaults": {
+            "[flow]": {
+                "editor.tabSize": 4,
+                "editor.insertSpaces": true,
+                "editor.defaultFormatter": "AlejaDiez.flow-language"
+            }
+        },
+        "languages": [
+            {
+                "id": "flow",
+                "aliases": [
+                    "Flow"
+                ],
+                "extensions": [
+                    ".flow"
+                ],
+                "configuration": "./syntaxes/flow-language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "flow",
+                "scopeName": "source.flow",
+                "path": "./syntaxes/flow.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "flow",
+                "path": "./snippets/flow.json"
+            }
+        ]
+    },
+    "scripts": {
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "typescript": "^4.4.4",
+        "vscode": "^1.1.34"
+    }
+}
