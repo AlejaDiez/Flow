@@ -94,9 +94,9 @@ print(f"Hello, World! Here I am {pi}");
 
 ## Changelog
 
-Add syntax highlighting and snippets for Flow in Visual Studio Code.
+Add formatter for Flow in Visual Studio Code.
 
--   Create a new extension for vscode, located in the `extension` directory. To install it, you must add the extension folder to the vscode extensions directory.
+-   Update the extension for vscode, located in the `extension` directory. To install it, you must add the extension folder to the vscode extensions directory.
 
 ## Contribution
 

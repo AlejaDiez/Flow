@@ -1,6 +1,14 @@
 if (0 > 1) {
     print(0);
 } else if (0 < 1) {
+    var a: int;
+
+    if (a - b) {
+        pirnt(dsa);
+        if (b - c) {
+            print(ads);
+        }
+    }
     print(1);
 } else {
     print(2);

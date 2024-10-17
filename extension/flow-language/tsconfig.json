@@ -15,6 +15,6 @@
         "noEmit": false,
         "noImplicitAny": true
     },
-    "include": ["./src/*.ts"],
+    "include": ["./src/*.ts", "src/utils/lexer.ts"],
     "exclude": ["node_modules", "out"]
 }

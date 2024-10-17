@@ -3,4 +3,3 @@ var b: bool;
 
 a = 0;
 b = true;
- 
